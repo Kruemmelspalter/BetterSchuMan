@@ -1,0 +1,126 @@
+openapi: 3.0.0
+
+info:
+  version: 0.0.1
+  title: Custom API for Schulmanager
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    teacher:
+      type: object
+      properties:
+        id:
+          type: integer
+        firstname:
+          type: string
+          example: John
+        lastname:
+          type: string
+          example: Doe
+    course:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+          example: Computer Science
+        abbreviation:
+          type: string
+          example: CS
+        teacher:
+          $ref: "#/components/schemas/teacher"
+        color:
+          type: string
+
+paths:
+  /session:
+    description: manage session (logging in and out etc.)
+    get:
+      security:
+        - bearerAuth: []
+      description: get info about session
+      responses:
+        200:
+          description: successfully fetched login info
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  email:
+                    type: string
+                    example: john.doe@example.com
+                  id:
+                    type: integer
+                  firstname:
+                    type: string
+                    example: John
+                  lastname:
+                    type: string
+                    example: Doe
+                  studentId:
+                    type: integer
+                  classId:
+                    type: integer
+
+        400:
+          description: bad request
+        401:
+          description: bad credentials
+        502:
+          description: the Schulmanager servers returned something the server couldn't handle
+        504:
+          description: the Schulmanager servers didn't respond
+
+    post:
+      description: Log in
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  required: true
+                password:
+                  type: string
+                  required: true
+      responses:
+        200:
+          description: Logging in was successful
+          headers:
+            X-New-Bearer-Token:
+              schema:
+                type: string
+              description: JWT Bearer Token
+        400:
+          description: bad request
+        401:
+          description: bad credentials
+        502:
+          description: the Schulmanager servers returned something the server couldn't handle
+        504:
+          description: the Schulmanager servers didn't respond
+    delete:
+      security:
+        - bearerAuth: []
+      description: logout
+      responses:
+        200:
+          description: Logged out successfully
+        400:
+          description: bad request
+        401:
+          description: logging in first is required
+        502:
+          description: the Schulmanager servers returned something the server couldn't handle
+        504:
+          description: the Schulmanager servers didn't respond
