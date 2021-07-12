@@ -22,6 +22,9 @@ components:
         lastname:
           type: string
           example: Doe
+        abbreviation:
+          type: string
+          example: Do
     course:
       type: object
       properties:
@@ -280,6 +283,52 @@ paths:
                       type: integer
                     name:
                       type: string
+        400:
+          description: bad request
+        401:
+          description: logging in first is required
+        502:
+          description: the Schulmanager servers returned something the server couldn't handle
+        504:
+          description: the Schulmanager servers didn't respond
+
+  /schedule:
+    get:
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: week
+          schema:
+            type: integer
+          in: query
+      responses:
+        200:
+          description: successfully fetched schedule
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    day:
+                      type: integer
+                      example: 1
+                      description: day (Monday=0, Friday=4)
+                    period:
+                      type: integer
+                      example: 5
+                      description: period (1=0...MP=6;7=7...)
+                    room:
+                      type: string
+                      example: G053
+                    course:
+                      $ref: "#/components/schemas/course"
+                    isCancelled:
+                      type: boolean
+                    cancelComment:
+                      type: string
+                      required: false
         400:
           description: bad request
         401:
