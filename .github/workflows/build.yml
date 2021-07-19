@@ -13,9 +13,6 @@ jobs:
       - run: mkdir backend/static
       - run: cp -r frontend/dist/frontend/* backend/static
       - run: echo ${{ secrets.DOCKERHUB_PASSWORD }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
-      - run: docker build . -t kruemmelspalter/betterschuman:${{steps.vars.output.tag}}
-      - run: docker push kruemmelspalter/betterschuman:${{steps.vars.output.tag}}
-
       - run: docker build . -t kruemmelspalter/betterschuman:latest
       - run: docker push kruemmelspalter/betterschuman:latest
 
