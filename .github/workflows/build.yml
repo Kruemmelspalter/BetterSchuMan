@@ -1,29 +1,16 @@
 on: [ push ]
 jobs:
-  angular:
-    defaults:
-      run:
-        working-directory: frontend
+  docker:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - run: |
           npm install
           npm install @angular/cli
+        working-directory: frontend
       - run: npx ng build
-      - uses: actions/upload-artifact@v2
-        with:
-          name: static
-          path: frontend/dist/frontend
-
-  docker:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/download-artifact@v2
-        with:
-          name: static
-          path: backend/static
+        working-directory: frontend
+      - run: cp -r frontend/dist/frontend/* backend/static
       - run: echo ${{ secrets.DOCKERHUB_PASSWORD }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
       - run: docker build . -t kruemmelspalter/betterschuman:${{steps.vars.output.tag}}
       - run: docker push kruemmelspalter/betterschuman:${{steps.vars.output.tag}}
