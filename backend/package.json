@@ -1,0 +1,27 @@
+{
+  "name": "betterschuman",
+  "version": "0.0.1",
+  "description": "",
+  "main": "server.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "run": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kruemmelspalter/BetterSchuMan.git"
+  },
+  "author": "Kruemmelspalter",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Kruemmelspalter/BetterSchuMan/issues"
+  },
+  "homepage": "https://github.com/Kruemmelspalter/BetterSchuMan#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "type": "module"
+}
