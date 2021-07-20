@@ -1,5 +1,5 @@
 import express from 'express'
-import ApiRoute from './routes/api'
+import * as ApiRouter from './routes/api.js'
 const app = express()
 
 app.get('/', (req, res) => {
@@ -7,7 +7,6 @@ app.get('/', (req, res) => {
 })
 
 app.use('/app', express.static('static'))
-
-app.use('/api', ApiRoute)
+app.use('/api', ApiRouter.router)
 
 app.listen(8080)

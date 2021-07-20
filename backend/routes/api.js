@@ -1,10 +1,8 @@
 import {Router} from "express";
-import SessionRoute from 'api/session'
-import CoursesRoute from 'api/courses'
+import * as SessionRoute from './api/session.js'
+import * as CoursesRoute from './api/courses.js'
 
-const router = Router()
+export const router = Router()
 
-router.use('/session', SessionRoute)
-router.use('/courses', CoursesRoute)
-
-module.exports = router
+router.use('/session', SessionRoute.router)
+router.use('/courses', CoursesRoute.router)

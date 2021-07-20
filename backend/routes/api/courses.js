@@ -1,6 +1,4 @@
 import {Router} from "express";
 
-const router = Router()
+export const router = Router()
 
-
-module.exports = router
