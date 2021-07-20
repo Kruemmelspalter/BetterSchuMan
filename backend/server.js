@@ -3,10 +3,10 @@ import * as ApiRouter from './routes/api.js'
 const app = express()
 
 app.get('/', (req, res) => {
-    res.redirect('/static/index.html')
+    res.redirect('/app/index.html')
 })
 
-app.use('/app', express.static('static'))
+app.use('/app', express.static('./static'))
 app.use('/api', ApiRouter.router)
 
 app.listen(8080)
