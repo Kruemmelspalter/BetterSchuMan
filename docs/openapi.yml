@@ -1,4 +1,4 @@
-openapi: 3.0.0
+openapi: 3.1.0
 
 info:
   version: 0.0.1
@@ -17,11 +17,14 @@ components:
         id:
           type: integer
         firstname:
-          type: string
-          example: John
+            type: string
+            example: John
         lastname:
           type: string
           example: Doe
+        abbreviation:
+          type: string
+          example: Do
     course:
       type: object
       properties:
@@ -43,7 +46,7 @@ paths:
     description: manage session (logging in and out etc.)
     get:
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       description: get info about session
       responses:
         200:
@@ -111,7 +114,7 @@ paths:
           description: the Schulmanager servers didn't respond
     delete:
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       description: logout
       responses:
         200:
@@ -128,7 +131,7 @@ paths:
   /courses:
     get:
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       responses:
         200:
           description: successfully fetched courses
@@ -149,7 +152,7 @@ paths:
   /courses/{courseId}:
     get:
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       parameters:
         - name: courseId
           in: path
@@ -173,7 +176,7 @@ paths:
   /courses/{courseId}/units:
     get:
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       parameters:
         - name: courseId
           in: path
@@ -206,7 +209,7 @@ paths:
   /courses/{courseId}/units/{unitId}:
     get:
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       parameters:
         - name: courseId
           in: path
@@ -237,7 +240,7 @@ paths:
                           type: integer
                         type:
                           type: string
-                          enum: [text, attachments]
+                          enum: [ text, attachments ]
                         content:
                           oneOf:
                             - type: array
@@ -265,7 +268,7 @@ paths:
   /courses/undone:
     get:
       security:
-        - bearerAuth: []
+        - bearerAuth: [ ]
       responses:
         200:
           description: successfully fetched units
@@ -288,3 +291,158 @@ paths:
           description: the Schulmanager servers returned something the server couldn't handle
         504:
           description: the Schulmanager servers didn't respond
+
+  /schedule:
+    get:
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - name: week
+          schema:
+            type: integer
+          in: query
+      responses:
+        200:
+          description: successfully fetched schedule
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    day:
+                      type: integer
+                      example: 1
+                      description: day (Monday=0, Friday=4)
+                    period:
+                      type: integer
+                      example: 5
+                      description: period (1=0...MP=6;7=7...)
+                    room:
+                      type: string
+                      example: G053
+                    course:
+                      $ref: "#/components/schemas/course"
+                    isCancelled:
+                      type: boolean
+                    cancelComment:
+                      type: string
+                      required: false
+        400:
+          description: bad request
+        401:
+          description: logging in first is required
+        502:
+          description: the Schulmanager servers returned something the server couldn't handle
+        504:
+          description: the Schulmanager servers didn't respond
+
+  /messages:
+    get:
+      security:
+        - bearerAuth: [ ]
+      responses:
+        200:
+          description: successfully fetched messages
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    threadId:
+                      type: integer
+                    subject:
+                      type: string
+                    isPrivateChat:
+                      type: boolean
+                    allowsAnswers:
+                      type: boolean
+                    unread:
+                      type: integer
+        400:
+          description: bad request
+        401:
+          description: logging in first is required
+        502:
+          description: the Schulmanager servers returned something the server couldn't handle
+        504:
+          description: the Schulmanager servers didn't respond
+  /messages/{threadId}:
+    get:
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - name: threadId
+          in: path
+          schema:
+            type: integer
+      responses:
+        200:
+          description: successfully fetched thread
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    text:
+                      type: string
+                    sender:
+                      type: object
+                      properties:
+                        firstname:
+                          type: string
+                        lastname:
+                          type: string
+                    attachments:
+                      type: array
+                      items:
+                        type: object
+                          properties:
+                            download:
+                              type: string
+                            filename:
+                              type: string
+                            contenttype:
+                              type: string
+        400:
+          description: bad request
+        401:
+          description: logging in first is required
+        502:
+          description: the Schulmanager servers returned something the server couldn't handle
+        504:
+          description: the Schulmanager servers didn't respond
+    post:
+      description: Send message
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - name: threadId
+          in: path
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                text:
+                  type: string
+      responses:
+        200:
+          description: successfully sent message
+        400:
+          description: bad request
+        401:
+          description: logging in first is required
+        502:
+          description: the Schulmanager servers returned something the server couldn't handle
+        504:
+          description: the Schulmanager servers didn't respond
+
