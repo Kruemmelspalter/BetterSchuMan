@@ -1,0 +1,38 @@
+---
+---
+body {
+  display: grid;
+  grid-template-columns: 25% 50% 25%;
+  margin: 0;
+
+  background-color: #24292e;
+  font-family: sans-serif;
+}
+
+div#container {
+  grid-column: 2;
+  min-height: 100vh;
+
+  padding: 0 1% 0 1%;
+
+  background-color: #e6ebf1;
+}
+
+div#heading > b {
+  float: left;
+}
+div#heading > h1 {
+
+  text-align: center;
+  font-size: 3em;
+}
+
+div#content {
+  margin: 0 5% 0 5%;
+}
+
+
+div#swagger-ui {
+  background-color: white;
+  padding: 1vh;
+}

@@ -1,0 +1,14 @@
+---
+layout: default
+title: API documentation
+---
+<script charset="UTF-8" src="https://unpkg.com/swagger-ui-dist@3/swagger-ui-bundle.js"></script>
+<link href='https://petstore.swagger.io/swagger-ui.css' rel='stylesheet' type="text/css">
+
+<div id="swagger-ui"></div>
+<script>
+    const ui = SwaggerUIBundle({
+        url: "openapi.yml",
+        dom_id: "#swagger-ui"
+    })
+</script>
