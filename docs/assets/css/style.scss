@@ -9,6 +9,12 @@ body {
   font-family: sans-serif;
 }
 
+@media (max-width: 1000px) and (min-height: 500px) {
+  body {
+    grid-template-columns: 0 100% 0;
+  }
+}
+
 div#container {
   grid-column: 2;
   min-height: 100vh;
@@ -21,6 +27,7 @@ div#container {
 div#heading > b {
   float: left;
 }
+
 div#heading > h1 {
 
   text-align: center;
