@@ -1,0 +1,9 @@
+{% for link in site.pages %}
+{% if link.title and link.title != page.title%}
+<li>
+    <a href="{{link.url}}">
+        {{link.title | camelize}}
+    </a>
+</li>
+{%endif%}
+{% endfor %}
