@@ -1,13 +1,13 @@
 <html lang="en">
 <head>
     <title>BetterSchuMan - {{ page.title | camelize }}</title>
-    <link href="{{"/assets/css/style.css" | relative_url}}" rel="stylesheet">
+    <link href="{{'/assets/css/style.css' | relative_url}}" rel="stylesheet">
 </head>
 
 <body>
 <div id="container">
     <div id="heading">
-        <b><a href="/">BetterSchuMan</a></b>
+        <b><a href="{{'/'|relative_url}}">BetterSchuMan</a></b>
         <h1> {{ page.title | camelize }}</h1>
     </div>
     <div id="content">
