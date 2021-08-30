@@ -21,7 +21,9 @@
   },
   "homepage": "https://github.com/Kruemmelspalter/BetterSchuMan#readme",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "express-winston": "^4.1.0",
+    "winston": "^3.3.3"
   },
   "type": "module"
 }

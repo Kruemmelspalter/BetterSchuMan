@@ -1,0 +1,8 @@
+version: '3'
+
+services:
+  betterschuman:
+    image: kruemmelspalter/betterschuman
+    ports:
+      - "8080:80"
+    restart: unless-stopped
