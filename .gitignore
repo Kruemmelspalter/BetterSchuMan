@@ -2,6 +2,7 @@ package-lock.json
 node_modules
 .idea
 backend/static
-_site
-Cache
 *lock*
+.jekyll-cache
+_site
+Gemfile.lock
