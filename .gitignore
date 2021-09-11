@@ -1,6 +1,4 @@
-package-lock.json
 node_modules
 .idea
 .jekyll-cache
 _site
-Gemfile.lock
