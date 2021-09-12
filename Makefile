@@ -5,7 +5,6 @@ tagName := $(shell git describe --tags)
 cleanbuild: build clean
 
 build: $(wildcard backend/**) backend/static
-	@echo commithash: $(commitHash)
 	docker build . -t kruemmelspalter/betterschuman:$(commitHash)
 
 backend/static: $(wildcard frontend/**)
