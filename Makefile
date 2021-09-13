@@ -23,6 +23,8 @@ endif
 ifneq "$(tagName)" ""
 	docker tag kruemmelspalter/betterschuman:$(commitHash) kruemmelspalter/betterschuman:$(tagName)
 	docker push kruemmelspalter/betterschuman:$(tagName)
+	docker tag kruemmelspalter/betterschuman:$(commitHash) kruemmelspalter/betterschuman:stable
+	docker push kruemmelspalter/betterschuman:stable
 endif
 
 clean: backend/static
