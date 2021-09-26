@@ -3,7 +3,7 @@ import * as ApiRouter from './routes/api.js'
 import expressWinston from 'express-winston'
 import winston from "winston";
 
-const app = express()
+export const app = express()
 
 app.use(expressWinston.logger({
     transports: [
@@ -18,4 +18,4 @@ app.use(express.static('./static'))
 
 app.use('/api', ApiRouter.router)
 
-app.listen(80, () => console.log(`Listening`))
+app.listen(process.env.PORT || 80, () => console.log(`Listening`))
