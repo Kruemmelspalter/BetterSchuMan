@@ -5,6 +5,7 @@ WORKDIR /opt/betterschuman
 COPY backend/package.json .
 RUN npm install --production
 
-COPY backend .
+COPY backend/dist .
+COPY frontend/dist ./static
 
-CMD npm run run
+CMD node main.js

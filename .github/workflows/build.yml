@@ -6,4 +6,5 @@ jobs:
       - uses: actions/checkout@v2
       - run: echo ${{ secrets.DOCKERHUB_PASSWORD }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
       - run: cd frontend && yarn install
+      - run: cd backend && yarn install
       - run: make cleanpush
