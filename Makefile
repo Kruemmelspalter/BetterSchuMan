@@ -13,7 +13,7 @@ backend/dist: $(wildcard backend/src/**)
 	cd backend && yarn build
 
 
-push: backend/dist
+push: build
 	docker push kruemmelspalter/betterschuman:$(commitHash)
 	docker tag kruemmelspalter/betterschuman:$(commitHash) kruemmelspalter/betterschuman:$(branchName)
 	docker push kruemmelspalter/betterschuman:$(branchName)
