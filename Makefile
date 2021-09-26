@@ -6,15 +6,14 @@ tagName := $(shell git describe --tags)
 default: cleanbuild
 
 
-backend/static: $(wildcard frontend/**)
-	mkdir -pv backend/static
+frontend/dist: $(wildcard frontend/src/**)
 	cd frontend && yarn build
-	cp -rv frontend/dist/* backend/static
 
-build: $(wildcard backend/**) backend/static
-	docker build . -t kruemmelspalter/betterschuman:$(commitHash)
+backend/dist: $(wildcard backend/src/**)
+	cd backend && yarn build
 
-push: build
+
+push: backend/dist
 	docker push kruemmelspalter/betterschuman:$(commitHash)
 	docker tag kruemmelspalter/betterschuman:$(commitHash) kruemmelspalter/betterschuman:$(branchName)
 	docker push kruemmelspalter/betterschuman:$(branchName)
@@ -30,15 +29,17 @@ ifneq "$(tagName)" ""
 endif
 
 deploy: build
+	docker tag kruemmelspalter/betterschuman:$(commitHash) kruemmelspalter/betterschuman:latest
 	docker-compose up -d
 
 tests: $(wildcard backend/test/**) $(wildcard backend/**)
-	cd backend && npm run test
+	cd backend && npm run test && npm run test:cov
 
+clean: frontend/dist backend/dist
+	rm -rv backend/dist frontend/dist
 
-clean: backend/static
-	rm -rv backend/static frontend/dist
-
+build: backend/dist frontend/dist
+	docker build . -t kruemmelspalter/betterschuman:$(commitHash)
 
 cleanbuild: build clean
 
