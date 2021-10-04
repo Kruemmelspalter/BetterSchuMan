@@ -12,8 +12,7 @@ import { RouterModule } from "@nestjs/core";
         module: SessionModule
       }
     ])
-  ],
-  controllers: []
+  ]
 })
 export class ApiModule {
 }
