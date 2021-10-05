@@ -1,15 +1,13 @@
 <template>
-  <div></div>
+
 </template>
 
 <script>
 export default {
-  name: "IndexView"
-}
+  name: "SidebarComponent"
+};
 </script>
 
 <style scoped>
-div {
-  height: 200vh;
-}
+
 </style>
