@@ -8,17 +8,18 @@
         </router-link>
       </div>
     </div>
-    <div id="content">
-      <router-view />
-    </div>
+    <router-view id="content" />
+    <SidebarComponent id="sidebar" />
   </div>
 </template>
 
 <script>
 
+import SidebarComponent from "@/components/SidebarComponent";
+
 export default {
   name: "App",
-  components: {},
+  components: { SidebarComponent },
   data() {
     let token = localStorage.getItem("token");
     return {
@@ -40,7 +41,7 @@ export default {
   display: grid;
   grid-template-columns: 25% auto 30%;
   grid-template-rows: calc(100vh / 16) auto;
-  min-height: 100vh;
+  max-height: 100vh;
   background: var(--color-background)
 }
 
@@ -54,28 +55,42 @@ export default {
 }
 
 #schuman_link {
-  margin-top: 5px;
   text-align: center;
   font-weight: bold;
-  font-size: 1.5em;
-  font-family: sans-serif;
+  font-size: 2.5vh !important;
   display: block;
   text-decoration: none;
+  color: var(--color-text-accent-1)
 }
 
-#schuman_link > span {
+#schuman_link > a > span {
   position: relative;
   font-size: 1.25em;
   top: 5px;
+  color: var(--color-text-accent-1)
+}
+
+#schuman_link > * {
+  color: var(--color-text-accent-1);
+  font-size: 1em !important;
 }
 
 
 #content {
   grid-column: 2;
   grid-row: 2;
-
   overflow-y: auto;
-  max-height: calc(100vh * 15 / 16);
+  max-height: calc(100vh * 14 / 16);
+  padding: 2%;
+  margin: 0 1% 1%;
+}
+
+#sidebar {
+  grid-column: 3;
+  grid-row: 2;
+  margin-left: 1%;
+  margin-bottom: 1%;
+  padding: 2%;
 }
 
 @media (orientation: portrait) {
@@ -89,6 +104,10 @@ export default {
 
   #content {
     grid-column: 1;
+  }
+
+  #sidebar {
+    display: none;
   }
 }
 </style>
