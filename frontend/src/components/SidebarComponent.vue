@@ -25,14 +25,14 @@ export default {
   components: { ChatComponent, NotificationsComponent, CalendarComponent, ScheduleComponent },
   data() {
     return {
-      activeTab: -1
+      activeTab: -1,
     };
   },
   methods: {
     activate(id) {
       this.activeTab = id;
-    }
-  }
+    },
+  },
 };
 </script>
 

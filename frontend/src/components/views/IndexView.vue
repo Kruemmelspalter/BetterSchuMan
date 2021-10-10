@@ -44,7 +44,7 @@
 
 <script>
 export default {
-  name: "IndexView"
+  name: "IndexView",
 }
 </script>
 

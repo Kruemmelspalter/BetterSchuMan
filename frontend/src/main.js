@@ -12,10 +12,10 @@ const router = new VueRouter({
   routes: [
     { path: "/", component: IndexView },
     { path: "/login", component: LoginView }
-  ]
+  ],
 });
 
 new Vue({
   router: router,
-  render: h => h(App)
+  render: h => h(App),
 }).$mount("#app");
