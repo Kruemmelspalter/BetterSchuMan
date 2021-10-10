@@ -36,7 +36,6 @@ export class SessionController {
       return;
     }
     const token = tokenMatches[1];
-    console.log(token);
     const data = await this.sessionService.getSessionInfo({ jwt: token });
     if (!isNaN(data)) {
       res.status(data).send();

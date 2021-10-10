@@ -8,7 +8,9 @@
         </router-link>
       </div>
     </div>
-    <router-view id="content" />
+    <div id="content">
+      <router-view />
+    </div>
     <SidebarComponent id="sidebar" />
   </div>
 </template>
@@ -23,15 +25,14 @@ export default {
   data() {
     let token = localStorage.getItem("token");
     return {
-      token: token
+      token: token,
     };
   },
   mounted() {
-    if (this.token === null && this.$route.path !== "/login") this.$router.push("/login");
+    if (this.token === null) {
+      if (this.$route.path !== "/login") this.$router.push("/login");
+    } else if (this.$route.path === "/login") this.$router.push("/");
   },
-  beforeUpdate() {
-    if (this.token === null && this.$route.path !== "/login") this.$router.push("/login");
-  }
 };
 </script>
 

@@ -6,10 +6,13 @@ import { Session } from "./entities/session.entity";
 @Injectable()
 export class SessionService {
   async login(createSessionDto: CreateSessionDto) {
+
     const res = await superagent
       .post("https://login.schulmanager-online.de/api/login")
+      .ok(_ => true)
       .send({ emailOrUsername: createSessionDto.username, password: createSessionDto.password });
 
+    if (!res) return 500;
     if (res.statusCode != 200) return res.statusCode;
 
     const data = res.body;

@@ -2,7 +2,8 @@
     --color-content-background: #2b303a;
     --color-background: #1a1d23;
     --color-text: #e5e5e5;
-    --color-text-accent-1: #F9DF74;
+    --color-text-accent-1: #f9df74;
+    --color-text-accent-2: #d64933;
 }
 
 * {

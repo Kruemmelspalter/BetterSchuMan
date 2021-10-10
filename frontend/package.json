@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "core-js": "^3.6.5",
+    "superagent": "^6.1.0",
     "vue": "^2.6.11",
     "vue-router": "^3.5.2"
   },
@@ -33,7 +34,21 @@
     "parserOptions": {
       "parser": "babel-eslint"
     },
-    "rules": {}
+    "rules": {
+      "no-unused-vars": [
+        "error",
+        {
+          "argsIgnorePattern": "_"
+        }
+      ],
+      "comma-dangle": [
+        "warn",
+        {
+          "functions": "never",
+          "objects": "always-multiline"
+        }
+      ]
+    }
   },
   "browserslist": [
     "> 1%",
