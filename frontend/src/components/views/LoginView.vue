@@ -58,6 +58,9 @@ export default {
       await this.$router.push("/");
     },
   },
+
+ <div>login</div>
+</template>
 };
 </script>
 

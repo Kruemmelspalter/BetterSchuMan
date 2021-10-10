@@ -25,6 +25,7 @@ export default {
   data() {
     let token = localStorage.getItem("token");
     return {
+
       token: token,
     };
   },
@@ -33,6 +34,15 @@ export default {
       if (this.$route.path !== "/login") this.$router.push("/login");
     } else if (this.$route.path === "/login") this.$router.push("/");
   },
+      token: token
+    };
+  },
+  mounted() {
+    if (this.token === null && this.$route.path !== "/login") this.$router.push("/login");
+  },
+  beforeUpdate() {
+    if (this.token === null && this.$route.path !== "/login") this.$router.push("/login");
+  }
 };
 </script>
 
