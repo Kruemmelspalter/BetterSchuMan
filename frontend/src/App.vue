@@ -1,13 +1,13 @@
 <template>
   <div id="app">
-    <div id="header">
-      <div id="schuman_link">
-        <router-link to="/">
-          <span class="material-icons">school</span>
-          Schulmanager
-        </router-link>
-      </div>
+    <UserInfoLink :name='(userinfo["firstname"] || "") + " " + (userinfo["lastname"] || "")' />
+    <div id="schuman_link">
+      <router-link to="/">
+        <span class="material-icons">school</span>
+        Schulmanager
+      </router-link>
     </div>
+    <div />
     <div id="content">
       <router-view />
     </div>
@@ -18,21 +18,40 @@
 <script>
 
 import SidebarComponent from "@/components/SidebarComponent";
+import superagent from "superagent";
+import UserInfoLink from "@/UserInfoLink";
 
 export default {
   name: "App",
-  components: { SidebarComponent },
+  components: { UserInfoLink, SidebarComponent },
   data() {
     let token = localStorage.getItem("token");
     return {
-
       token: token,
+      userinfo: {},
     };
   },
   mounted() {
     if (this.token === null) {
       if (this.$route.path !== "/login") this.$router.push("/login");
     } else if (this.$route.path === "/login") this.$router.push("/");
+
+    document.title = `SchuMan: ${this.$route.name || this.$route.path}`;
+
+    superagent
+      .get("/api/session")
+      .ok(_ => true)
+      .auth(this.token, { type: "bearer" })
+      .send()
+      .then(res => {
+        if (res.status !== 200) {
+          localStorage.removeItem("token");
+          this.$router.push("/login");
+          return;
+        }
+        this.userinfo = res.body;
+
+      });
   },
 };
 </script>
@@ -45,15 +64,6 @@ export default {
   grid-template-rows: calc(100vh / 16) auto;
   max-height: 100vh;
   background: var(--color-background)
-}
-
-#header {
-  padding-top: 10px;
-  grid-column-start: 1;
-  grid-column-end: 4;
-
-  overflow-y: hidden;
-  max-height: calc(100vh / 16);
 }
 
 #schuman_link {
@@ -98,10 +108,6 @@ export default {
 @media (orientation: portrait) {
   #app {
     grid-template-columns: auto;
-  }
-
-  #header {
-    grid-column: 1;
   }
 
   #content {
