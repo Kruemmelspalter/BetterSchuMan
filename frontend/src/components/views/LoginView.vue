@@ -56,6 +56,7 @@ export default {
       }
       localStorage.setItem("token", token);
       await this.$router.push("/");
+      document.location.reload();
     },
   },
 };

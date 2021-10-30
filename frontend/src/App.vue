@@ -1,13 +1,13 @@
 <template>
   <div id="app">
-    <UserInfoLink :name='(userinfo["firstname"] || "") + " " + (userinfo["lastname"] || "")' />
+    <div />
     <div id="schuman_link">
       <router-link to="/">
         <span class="material-icons">school</span>
         Schulmanager
       </router-link>
     </div>
-    <div />
+    <UserInfoLink :name='(userinfo["firstname"] || "") + " " + (userinfo["lastname"] || "")' />
     <div id="content">
       <router-view />
     </div>
