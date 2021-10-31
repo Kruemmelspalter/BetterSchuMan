@@ -7,7 +7,7 @@
         Schulmanager
       </router-link>
     </div>
-    <UserInfoLink :name='(userinfo["firstname"] || "") + " " + (userinfo["lastname"] || "")' />
+    <UserInfoLink />
     <div id="content">
       <router-view />
     </div>
@@ -24,15 +24,10 @@ import UserInfoLink from "@/UserInfoLink";
 export default {
   name: "App",
   components: { UserInfoLink, SidebarComponent },
-  data() {
-    let token = localStorage.getItem("token");
-    return {
-      token: token,
-      userinfo: {},
-    };
-  },
   mounted() {
-    if (this.token === null) {
+    this.$store.state.token = localStorage.getItem("token");
+
+    if (this.$store.state.token === null) {
       if (this.$route.path !== "/login") this.$router.push("/login");
     } else if (this.$route.path === "/login") this.$router.push("/");
 
@@ -41,7 +36,7 @@ export default {
     superagent
       .get("/api/session")
       .ok(_ => true)
-      .auth(this.token, { type: "bearer" })
+      .auth(this.$store.state.token, { type: "bearer" })
       .send()
       .then(res => {
         if (res.status !== 200) {
@@ -49,7 +44,7 @@ export default {
           this.$router.push("/login");
           return;
         }
-        this.userinfo = res.body;
+        this.$store.state.userinfo = res.body;
 
       });
   },
@@ -62,7 +57,7 @@ export default {
   display: grid;
   grid-template-columns: 25% auto 30%;
   grid-template-rows: calc(100vh / 16) auto;
-  max-height: 100vh;
+  height: 100vh;
   background: var(--color-background)
 }
 

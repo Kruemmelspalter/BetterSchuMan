@@ -15,9 +15,6 @@
 <script>
 export default {
   name: "UserInfoLink",
-  props: {
-    name: String,
-  },
   methods: {
     logout() {
       localStorage.removeItem("token");
@@ -28,6 +25,16 @@ export default {
     return {
       dropdown: false,
     };
+  },
+  computed: {
+    name() {
+      return (this.$store.state.userinfo["firstname"] || "") + " " + (this.$store.state.userinfo["lastname"] || "");
+    },
+  },
+  mounted() {
+    this.$router.afterEach(() => {
+      this.dropdown = false;
+    });
   },
 };
 </script>

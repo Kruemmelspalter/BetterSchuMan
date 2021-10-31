@@ -55,8 +55,18 @@ export default {
         return;
       }
       localStorage.setItem("token", token);
+      this.$store.state.token = token;
+      {
+        const res = await superagent
+          .get("/api/session")
+          .ok(_ => true)
+          .auth(this.$store.state.token, { type: "bearer" })
+          .send();
+        if (res.status !== 200) return;
+        this.$store.state.userinfo = res.body;
+      }
       await this.$router.push("/");
-      document.location.reload();
+
     },
   },
 };
