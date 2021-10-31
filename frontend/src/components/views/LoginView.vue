@@ -55,7 +55,7 @@ export default {
         return;
       }
       localStorage.setItem("token", token);
-      this.$store.state.token = token;
+      this.$store.commit('setToken', token);
       {
         const res = await superagent
           .get("/api/session")
@@ -63,7 +63,7 @@ export default {
           .auth(this.$store.state.token, { type: "bearer" })
           .send();
         if (res.status !== 200) return;
-        this.$store.state.userinfo = res.body;
+        this.$store.commit('setUserInfo', res.body);
       }
       await this.$router.push("/");
 

@@ -25,7 +25,7 @@ export default {
   name: "App",
   components: { UserInfoLink, SidebarComponent },
   mounted() {
-    this.$store.state.token = localStorage.getItem("token");
+    this.$store.commit('setToken', localStorage.getItem("token"));
 
     if (this.$store.state.token === null) {
       if (this.$route.path !== "/login") this.$router.push("/login");
@@ -44,7 +44,7 @@ export default {
           this.$router.push("/login");
           return;
         }
-        this.$store.state.userinfo = res.body;
+        this.$store.commit('setUserInfo', res.body);
 
       });
   },

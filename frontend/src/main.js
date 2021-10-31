@@ -28,9 +28,17 @@ new Vue({
   store: new Vuex.Store({
     state() {
       return {
-        token: "",
+        token: null,
         userinfo: {},
       };
+    },
+    mutations: {
+      setToken(state, token) {
+        state.token = token;
+      },
+      setUserInfo(state, userinfo) {
+        state.userinfo = userinfo;
+      },
     },
   }),
   render: (h) => h(App),
