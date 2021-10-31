@@ -11,7 +11,7 @@ version: '3'
 
 services:
   betterschuman:
-    image: kruemmelspalter/betterschuman
+    image: kruemmelspalter/betterschuman:release
     ports:
       - "8080:80"
     # Only uncomment for an always running server
