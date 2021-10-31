@@ -15,7 +15,7 @@ const router = new VueRouter({
   routes: [
     { path: "/", component: IndexView, name: "Dashboard" },
     { path: "/login", component: LoginView, name: "Login" },
-    { path: "/userinfo", component: UserInfoView, name: "Profile" },
+    { path: "/userinfo", component: UserInfoView, name: "Profile" }
   ],
 });
 router.afterEach(() => {
