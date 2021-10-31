@@ -19,7 +19,7 @@
 
 import SidebarComponent from "@/components/SidebarComponent";
 import superagent from "superagent";
-import UserInfoLink from "@/UserInfoLink";
+import UserInfoLink from "@/components/UserInfoLink";
 
 export default {
   name: "App",

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="$store.state.token !== ''">
     <div id="userinfo" @click="dropdown = !dropdown">
       {{ name }}
       <span id="userlogo" class="material-icons">person</span>
