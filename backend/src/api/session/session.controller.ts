@@ -23,10 +23,7 @@ export class SessionController {
     @Res() response: Response,
   ) {
     const data = await this.sessionService.login(createSessionDto);
-    response
-      .status(200)
-      .header({ 'X-New-Bearer-Token': data['jwt'] })
-      .send(data);
+    response.status(200).header({ 'X-New-Bearer-Token': data }).send(data);
   }
 
   @Get()

@@ -23,7 +23,7 @@ export class SessionService {
           throw new HttpException('Error', res.statusCode);
       }
 
-    return res.body;
+    return res.body['jwt'];
   }
 
   async getSessionInfo(session: Session) {
