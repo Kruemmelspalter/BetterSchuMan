@@ -3,15 +3,7 @@ branchName := $(shell git rev-parse --abbrev-ref HEAD)
 tagName := $(shell git describe --tags)
 
 
-default: cleanbuild
-
-
-frontend/dist: $(wildcard frontend/src/**)
-	cd frontend && yarn build
-
-backend/dist: $(wildcard backend/src/**)
-	cd backend && yarn build
-
+default: build
 
 push: build
 	docker push kruemmelspalter/betterschuman:$(commitHash)
@@ -35,14 +27,5 @@ deploy: build
 tests: $(wildcard backend/test/**) $(wildcard backend/**)
 	cd backend && npm run test && npm run test:cov
 
-clean: frontend/dist backend/dist
-	rm -rv backend/dist frontend/dist
-
-build: backend/dist frontend/dist
+build:
 	docker build . -t kruemmelspalter/betterschuman:$(commitHash)
-
-cleanbuild: build clean
-
-cleanpush: push clean
-
-cleandeploy: deploy clean
