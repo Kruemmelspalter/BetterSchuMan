@@ -1,19 +1,16 @@
-import { Module } from "@nestjs/common";
-import { SessionModule } from "./session/session.module";
-import { RouterModule } from "@nestjs/core";
-
+import { Module } from '@nestjs/common';
+import { SessionModule } from './session/session.module';
+import { RouterModule } from '@nestjs/core';
 
 @Module({
   imports: [
     SessionModule,
     RouterModule.register([
       {
-        path: "api",
-        module: SessionModule
-      }
-    ])
+        path: 'api',
+        module: SessionModule,
+      },
+    ]),
   ],
-  controllers: []
 })
-export class ApiModule {
-}
+export class ApiModule {}

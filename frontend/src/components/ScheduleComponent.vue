@@ -6,7 +6,7 @@
 
 <script>
 export default {
-  name: "ScheduleComponent"
+  name: "ScheduleComponent",
 };
 </script>
 

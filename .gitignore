@@ -2,3 +2,4 @@ node_modules
 .idea
 .jekyll-cache
 _site
+backend/static

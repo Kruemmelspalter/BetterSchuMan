@@ -1,14 +1,16 @@
 <template>
   <div id="app">
-    <div id="header">
-      <div id="schuman_link">
-        <router-link to="/">
-          <span class="material-icons">school</span>
-          Schulmanager
-        </router-link>
-      </div>
+    <div />
+    <div id="schuman_link">
+      <router-link to="/">
+        <span class="material-icons">school</span>
+        Schulmanager
+      </router-link>
     </div>
-    <router-view id="content" />
+    <UserInfoLink />
+    <div id="content">
+      <router-view />
+    </div>
     <SidebarComponent id="sidebar" />
   </div>
 </template>
@@ -16,22 +18,36 @@
 <script>
 
 import SidebarComponent from "@/components/SidebarComponent";
+import superagent from "superagent";
+import UserInfoLink from "@/components/UserInfoLink";
 
 export default {
   name: "App",
-  components: { SidebarComponent },
-  data() {
-    let token = localStorage.getItem("token");
-    return {
-      token: token
-    };
-  },
+  components: { UserInfoLink, SidebarComponent },
   mounted() {
-    if (this.token === null && this.$route.path !== "/login") this.$router.push("/login");
+    this.$store.commit('setToken', localStorage.getItem("token"));
+
+    if (this.$store.state.token === null) {
+      if (this.$route.path !== "/login") this.$router.push("/login");
+    } else if (this.$route.path === "/login") this.$router.push("/");
+
+    document.title = `SchuMan: ${this.$route.name || this.$route.path}`;
+
+    superagent
+      .get("/api/session")
+      .ok(_ => true)
+      .auth(this.$store.state.token, { type: "bearer" })
+      .send()
+      .then(res => {
+        if (res.status !== 200) {
+          localStorage.removeItem("token");
+          this.$router.push("/login");
+          return;
+        }
+        this.$store.commit('setUserInfo', res.body);
+
+      });
   },
-  beforeUpdate() {
-    if (this.token === null && this.$route.path !== "/login") this.$router.push("/login");
-  }
 };
 </script>
 
@@ -41,17 +57,8 @@ export default {
   display: grid;
   grid-template-columns: 25% auto 30%;
   grid-template-rows: calc(100vh / 16) auto;
-  max-height: 100vh;
+  height: 100vh;
   background: var(--color-background)
-}
-
-#header {
-  padding-top: 10px;
-  grid-column-start: 1;
-  grid-column-end: 4;
-
-  overflow-y: hidden;
-  max-height: calc(100vh / 16);
 }
 
 #schuman_link {
@@ -96,10 +103,6 @@ export default {
 @media (orientation: portrait) {
   #app {
     grid-template-columns: auto;
-  }
-
-  #header {
-    grid-column: 1;
   }
 
   #content {
