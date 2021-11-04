@@ -8,12 +8,16 @@ import {
 import * as Joi from 'joi';
 
 const CallsResponseSchema = Joi.object({
-  results: [
-    {
+  results: Joi.array().items(
+    Joi.object({
       status: Joi.number().min(100).max(599),
-      data: Joi.object(),
-    },
-  ],
+      data: Joi.alternatives().try(
+        Joi.object().unknown(true),
+        Joi.array().items(Joi.any()),
+      ),
+    }),
+  ),
+  systemStatusMessages: Joi.array().optional(),
 });
 
 export async function request(
@@ -81,8 +85,15 @@ export async function calls(
     logger.error({ id: requestId, status: 502 });
     throw new BadGatewayException();
   }
-  if (!(await CallsResponseSchema.validateAsync(res.body))) {
-    logger.error({ id: requestId, status: 502, body: res.body });
+  try {
+    await CallsResponseSchema.validateAsync(res.body);
+  } catch (e) {
+    logger.error({
+      id: requestId,
+      status: 502,
+      error: e.details.map((x) => x.message),
+      body: res.body,
+    });
     throw new BadGatewayException();
   }
 

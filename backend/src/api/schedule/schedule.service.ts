@@ -47,18 +47,31 @@ export class ScheduleService {
       const hour = hours.data.filter((y) => {
         return y.id === x.classHour.id;
       })[0];
+
+      const lesson = x.isCancelled ? x.originalLessons[0] : x.actualLesson;
       return {
         date: x.date,
         from: hour.from,
         to: hour.until,
         hour: hour.number,
-        room: x.actualLesson.room.name,
+        room: lesson.room.name || '',
+        cancelled: x.isCancelled || false,
         subject: {
-          abbreviation: x.actualLesson.subject.abbreviation,
-          name: x.actualLesson.subject.abbreviation,
-          label: x.actualLesson.subjectLabel,
+          abbreviation: lesson.subject.abbreviation,
+          name: lesson.subject.abbreviation,
+          label: lesson.subjectLabel,
         },
-        teachers: x.actualLesson.teachers,
+        teachers: lesson.teachers,
+        substitute: x.originalLessons !== undefined,
+        substituted: {
+          room: x.originalLessons[0].room.name,
+          subject: {
+            abbreviation: x.originalLessons[0].subject.abbreviation,
+            name: x.originalLessons[0].subject.abbreviation,
+            label: x.originalLessons[0].subjectLabel,
+          },
+          teachers: x.originalLessons[0].teachers,
+        },
       };
     });
 
