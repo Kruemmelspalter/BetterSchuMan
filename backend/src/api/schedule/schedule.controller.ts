@@ -5,10 +5,10 @@ import {
   Logger,
   Query,
   Req,
-  UnauthorizedException,
 } from '@nestjs/common';
 import { ScheduleService } from './schedule.service';
 import { Request } from 'express';
+import { checkAuth } from '../../schuman/checkAuth';
 
 @Controller('schedule')
 export class ScheduleController {
@@ -23,15 +23,8 @@ export class ScheduleController {
     if (query['start'] === null || query['end'] === null) {
       throw new BadRequestException();
     }
-    const authString = req.headers['authorization'] as string;
-    if (authString == undefined) {
-      throw new UnauthorizedException();
-    }
-    const tokenMatches = authString.match(/Bearer ([a-zA-Z0-9.\-_]+)/);
-    if (tokenMatches == undefined) {
-      throw new UnauthorizedException();
-    }
-    const token = tokenMatches[1];
+    const token = checkAuth(req.headers['authorization'] as string);
+
     return this.scheduleService.getSchedule(
       {
         jwt: token,
@@ -40,5 +33,11 @@ export class ScheduleController {
       },
       requestId,
     );
+  }
+
+  @Get('/hours')
+  getHours(@Req() req: Request) {
+    const requestId = req.headers['X-BetterSchuMan-ID'];
+    this.logger.log({ id: requestId });
   }
 }

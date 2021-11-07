@@ -53,7 +53,7 @@ export class ScheduleService {
         date: x.date,
         from: hour.from,
         to: hour.until,
-        hour: hour.number,
+        hour: hour.id,
         room: lesson.room.name || '',
         cancelled: x.isCancelled || false,
         subject: {
@@ -64,9 +64,8 @@ export class ScheduleService {
         teachers: lesson.teachers,
         substitute: x.originalLessons !== undefined && !x.isCancelled,
         substituted:
-          x.originalLessons === undefined || x.isCancelled
-            ? undefined
-            : {
+          x.originalLessons !== undefined && !x.isCancelled
+            ? {
                 room: x.originalLessons[0].room.name,
                 subject: {
                   abbreviation: x.originalLessons[0].subject.abbreviation,
@@ -74,7 +73,8 @@ export class ScheduleService {
                   label: x.originalLessons[0].subjectLabel,
                 },
                 teachers: x.originalLessons[0].teachers,
-              },
+              }
+            : undefined,
       };
     });
 
