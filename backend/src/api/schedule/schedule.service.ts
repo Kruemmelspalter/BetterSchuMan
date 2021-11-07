@@ -62,16 +62,19 @@ export class ScheduleService {
           label: lesson.subjectLabel,
         },
         teachers: lesson.teachers,
-        substitute: x.originalLessons !== undefined,
-        substituted: {
-          room: x.originalLessons[0].room.name,
-          subject: {
-            abbreviation: x.originalLessons[0].subject.abbreviation,
-            name: x.originalLessons[0].subject.abbreviation,
-            label: x.originalLessons[0].subjectLabel,
-          },
-          teachers: x.originalLessons[0].teachers,
-        },
+        substitute: x.originalLessons !== undefined && !x.isCancelled,
+        substituted:
+          x.originalLessons === undefined || x.isCancelled
+            ? undefined
+            : {
+                room: x.originalLessons[0].room.name,
+                subject: {
+                  abbreviation: x.originalLessons[0].subject.abbreviation,
+                  name: x.originalLessons[0].subject.abbreviation,
+                  label: x.originalLessons[0].subjectLabel,
+                },
+                teachers: x.originalLessons[0].teachers,
+              },
       };
     });
 
