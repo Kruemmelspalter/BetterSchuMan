@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { LoggerInterceptor } from './logging/logger.interceptor';
 import { SchuManLogger } from './logging/logger';
+import { LoggerInterceptor } from './logging/logger.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {

@@ -3,13 +3,13 @@ import {
   Controller,
   Get,
   HttpException,
+  Logger,
   Post,
   Req,
-  Res,
 } from '@nestjs/common';
 import { SessionService } from './session.service';
 import { CreateSessionDto } from './dto/create-session.dto';
-import { Request, Response } from 'express';
+import { Request } from 'express';
 
 @Controller('session')
 export class SessionController {
@@ -17,17 +17,23 @@ export class SessionController {
     this.sessionService = sessionService;
   }
 
+  private readonly logger = new Logger(SessionController.name);
+
   @Post()
   async create(
     @Body() createSessionDto: CreateSessionDto,
-    @Res() response: Response,
+    @Req() req: Request,
   ) {
-    const data = await this.sessionService.login(createSessionDto);
-    response.status(200).header({ 'X-New-Bearer-Token': data }).send(data);
+    const requestId = req.headers['X-BetterSchuMan-ID'];
+    this.logger.log({ id: requestId });
+    return await this.sessionService.login(createSessionDto, requestId);
   }
 
   @Get()
-  async getSessionInfo(@Req() req: Request, @Res() res: Response) {
+  async getSessionInfo(@Req() req: Request) {
+    const requestId = req.headers['X-BetterSchuMan-ID'];
+    this.logger.log({ id: requestId });
+
     const authString = req.headers['authorization'] as string;
     if (authString == undefined) {
       throw new HttpException('Unauthorized', 401);
@@ -37,7 +43,7 @@ export class SessionController {
       throw new HttpException('Unauthorized', 401);
     }
     const token = tokenMatches[1];
-    const data = await this.sessionService.getSessionInfo({ jwt: token });
-    res.send(data);
+
+    return await this.sessionService.getSessionInfo({ jwt: token }, requestId);
   }
 }

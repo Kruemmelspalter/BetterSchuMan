@@ -18,8 +18,7 @@ export class LoggerInterceptor implements NestInterceptor {
         msecs: Math.floor(begin.getTime() / 1000),
         nsecs: begin.getTime() % 1000,
       })
-      .replace('-', '');
-
+      .replaceAll('-', '');
     const request = context.switchToHttp().getRequest() as Request;
 
     request.headers['X-BetterSchuMan-ID'] = id;
