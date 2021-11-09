@@ -45,12 +45,12 @@ export default {
       if (res.status === 401) {
         this.invalidCreds = true;
         return;
-      } else if (res.status !== 200) {
+      } else if (res.status >= 400) {
         this.loginError = true;
         return;
       }
-      const token = res.header["x-new-bearer-token"];
-      if (token === undefined || token === null || token === "") {
+      const token = res.text;
+      if (!token || token === "") {
         this.loginError = true;
         return;
       }

@@ -27,10 +27,18 @@ export class LoggerInterceptor implements NestInterceptor {
       time: begin.getTime(),
       type: 'request',
     });
+
+    const { statusCode } = context.switchToHttp().getResponse();
+
     return next.handle().pipe(
       tap((_) => {
         const end = new Date();
-        this.logger.log({ id: id, time: end.getTime(), type: 'response' });
+        this.logger.log({
+          id: id,
+          time: end.getTime(),
+          type: 'response',
+          status: statusCode,
+        });
       }),
     );
   }
