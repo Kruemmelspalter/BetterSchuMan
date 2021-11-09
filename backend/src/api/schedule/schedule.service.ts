@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { BadGatewayException, Injectable, Logger } from '@nestjs/common';
 import { ScheduleIdDto } from './dto/scheduleId.dto';
 import { calls, request } from '../../schuman';
 
@@ -29,31 +29,11 @@ export class ScheduleService {
       requestId,
     );
 
-    const { body: hours } = await calls(
-      'schedules',
-      'poqa',
-      {
-        action: {
-          action: 'findAll',
-          model: 'main/class-hour',
-          parameters: [{ attributes: ['id', 'number', 'from', 'until'] }],
-        },
-      },
-      scheduleId.jwt,
-      requestId,
-    );
-
     const data = lessons.map((x) => {
-      const hour = hours.data.filter((y) => {
-        return y.id === x.classHour.id;
-      })[0];
-
       const lesson = x.isCancelled ? x.originalLessons[0] : x.actualLesson;
       return {
         date: x.date,
-        from: hour.from,
-        to: hour.until,
-        hour: hour.id,
+        hour: x.classHour.id,
         room: lesson.room.name || '',
         cancelled: x.isCancelled || false,
         subject: {
@@ -79,5 +59,27 @@ export class ScheduleService {
     });
 
     return { hours: data };
+  }
+
+  async getHours(token: string, requestId: string | string[]) {
+    this.logger.log({ id: requestId });
+    const { body: hours } = await calls(
+      'schedules',
+      'poqa',
+      {
+        action: {
+          action: 'findAll',
+          model: 'main/class-hour',
+          parameters: [{ attributes: ['id', 'number', 'from', 'until'] }],
+        },
+      },
+      token,
+      requestId,
+    );
+
+    if (hours.status !== 200 || !hours.data) {
+      throw new BadGatewayException();
+    }
+    return hours.data;
   }
 }

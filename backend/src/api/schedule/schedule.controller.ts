@@ -23,7 +23,7 @@ export class ScheduleController {
     if (query['start'] === null || query['end'] === null) {
       throw new BadRequestException();
     }
-    const token = checkAuth(req.headers['authorization'] as string);
+    const token = checkAuth(req.headers['authorization']);
 
     return this.scheduleService.getSchedule(
       {
@@ -39,5 +39,8 @@ export class ScheduleController {
   getHours(@Req() req: Request) {
     const requestId = req.headers['X-BetterSchuMan-ID'];
     this.logger.log({ id: requestId });
+
+    const token = checkAuth(req.headers['authorization']);
+    return this.scheduleService.getHours(token, requestId);
   }
 }
