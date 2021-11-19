@@ -15,10 +15,10 @@
 </template>
 
 <script>
-import ScheduleComponent from "@/components/ScheduleComponent";
-import CalendarComponent from "@/components/CalendarComponent";
-import NotificationsComponent from "@/components/NotificationsComponent";
-import ChatComponent from "@/components/ChatComponent";
+import ScheduleComponent from "@/components/sidebar/ScheduleComponent";
+import CalendarComponent from "@/components/sidebar/CalendarComponent";
+import NotificationsComponent from "@/components/sidebar/NotificationsComponent";
+import ChatComponent from "@/components/sidebar/ChatComponent";
 
 export default {
   name: "SidebarComponent",

@@ -1,10 +1,16 @@
-import { BadGatewayException, Injectable, Logger } from '@nestjs/common';
+import {
+  BadGatewayException,
+  Injectable,
+  Logger,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { ScheduleIdDto } from './dto/scheduleId.dto';
 import { calls, request } from '../../schuman';
 
 @Injectable()
 export class ScheduleService {
   private readonly logger = new Logger(ScheduleService.name);
+
   async getSchedule(scheduleId: ScheduleIdDto, requestId: string | string[]) {
     this.logger.log({ id: requestId });
     const userInfo = await request(
@@ -14,6 +20,7 @@ export class ScheduleService {
       scheduleId.jwt,
       requestId,
     );
+    if (!userInfo.body.isAuthenticated) throw new UnauthorizedException();
 
     const { body: lessons } = await calls(
       'schedules',
@@ -38,7 +45,7 @@ export class ScheduleService {
         cancelled: x.isCancelled || false,
         subject: {
           abbreviation: lesson.subject.abbreviation,
-          name: lesson.subject.abbreviation,
+          name: lesson.subject.name,
           label: lesson.subjectLabel,
         },
         teachers: lesson.teachers,

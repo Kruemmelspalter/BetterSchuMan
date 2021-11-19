@@ -97,7 +97,7 @@ export async function calls(
     throw new BadGatewayException();
   }
 
-  if (res.body.results[0].status >= 400) {
+  if (parseInt(res.body.results[0].status) >= 400) {
     logger.error({ id: requestId, status: res.statusCode, body: res.body });
     throw new HttpException(res.body, res.statusCode);
   }

@@ -5,6 +5,7 @@ import VueRouter from "vue-router";
 import LoginView from "@/components/views/LoginView";
 import UserInfoView from "@/components/views/UserInfoView";
 import Vuex from "vuex";
+import ScheduleView from "@/components/views/ScheduleView";
 
 Vue.config.productionTip = false;
 
@@ -15,7 +16,8 @@ const router = new VueRouter({
   routes: [
     { path: "/", component: IndexView, name: "Dashboard" },
     { path: "/login", component: LoginView, name: "Login" },
-    { path: "/userinfo", component: UserInfoView, name: "Profile" }
+    { path: "/userinfo", component: UserInfoView, name: "Profile" },
+    { path: "/schedule", component: ScheduleView, name: "Schedule" }
   ],
 });
 router.afterEach(() => {

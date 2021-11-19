@@ -17,14 +17,14 @@
 
 <script>
 
-import SidebarComponent from "@/components/SidebarComponent";
+import SidebarComponent from "@/components/sidebar/SidebarComponent";
 import superagent from "superagent";
 import UserInfoLink from "@/components/UserInfoLink";
 
 export default {
   name: "App",
   components: { UserInfoLink, SidebarComponent },
-  mounted() {
+  beforeMount() {
     this.$store.commit('setToken', localStorage.getItem("token"));
 
     if (this.$store.state.token === null) {
