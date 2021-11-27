@@ -1,6 +1,7 @@
 import {
   BadGatewayException,
   Injectable,
+  InternalServerErrorException,
   Logger,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -38,6 +39,18 @@ export class ScheduleService {
 
     const data = lessons.map((x) => {
       const lesson = x.isCancelled ? x.originalLessons[0] : x.actualLesson;
+      if (x.event)
+        return {
+          date: x.date,
+          hour: x.classHour.id,
+          room: '',
+          event: true,
+          text: x.event.text,
+          teachers: x.event.teachers,
+        };
+      if (lesson === undefined) {
+        throw new InternalServerErrorException();
+      }
       return {
         date: x.date,
         hour: x.classHour.id,
@@ -62,6 +75,7 @@ export class ScheduleService {
                 teachers: x.originalLessons[0].teachers,
               }
             : undefined,
+        event: false,
       };
     });
 
