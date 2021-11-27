@@ -15,7 +15,12 @@
     <table id="schedule">
       <tr>
         <th />
-        <th v-for="d in weekdays" :key="d.toMillis()" scope="col">{{ d.toLocaleString() }}</th>
+        <th v-for="d in weekdays" :key="d.toMillis()" scope="col">{{ d.toLocaleString({
+          day: "2-digit",
+          month: "2-digit",
+          year: "2-digit"
+        }) }}
+        </th>
       </tr>
       <tr v-for="h in hours" :key="h.from">
         <th scope="row">{{ h.number }}</th>
