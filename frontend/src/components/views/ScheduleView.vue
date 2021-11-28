@@ -22,11 +22,11 @@
         }) }}
         </th>
       </tr>
-      <tr v-for="h in hours" :key="h.from">
+      <tr v-for="h in hours" :key="Math.random().toString()+h.from">
         <th scope="row">{{ h.number }}</th>
         <td v-for="d in weekdays" :key="d.toMillis()" class="lesson">
 
-          <LessonThumbnail v-for="l in lessonsByDayAndHour(d,h)" :key="l.date+l.hour.toString()" :lesson="l" />
+          <LessonThumbnail v-for="l in lessonsByDayAndHour(d,h)" :key="Math.random()*l.hour" :lesson="l" />
         </td>
 
       </tr>
@@ -159,5 +159,6 @@ table > * {
 
 .lesson {
   padding: 1%;
+  max-width: 5vw;
 }
 </style>

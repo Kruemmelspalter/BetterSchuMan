@@ -1,12 +1,17 @@
 <template>
-  <div :class="lesson.cancelled ? 'cancelled' : ''" class="container">
-    <div :title="lesson.subject.name" class="name">
+  <div :class="(lesson.cancelled?'cancelled':'')+''+(lesson.substitute?'substitute':'')" class="container" v-if="!lesson.event">
+    <span :title="lesson.subject.name" class="name">
       {{ lesson.subject.abbreviation }}
-    </div>
-    <div class="room">{{ lesson.room }}</div>
-    <div :title="lesson.teachers[0].firstname+' '+lesson.teachers[0].lastname" class="teacher">
+      <span :title="lesson.substituted.subject.name" v-if="lesson.substitute">
+        ({{lesson.substituted.subject.abbreviation}})
+      </span>
+    </span>
+    <span class="room">
+      {{ lesson.room }}
+    </span>
+    <span :title="lesson.teachers[0].firstname+' '+lesson.teachers[0].lastname" class="teacher">
       {{ lesson.teachers[0].abbreviation }}
-    </div>
+    </span>
   </div>
 </template>
 
@@ -35,11 +40,13 @@ export default {
   background-color: var(--color-text-accent-2);
 }
 
-.cancelled > div {
-  color: var(--color-text-accent-1);
+.cancelled > span {
   background-color: var(--color-text-accent-2);
 }
 
+.substitute > span {
+  color: var(--color-text-accent-1);
+}
 
 .name {
   font-weight: bold;
