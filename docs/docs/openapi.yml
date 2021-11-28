@@ -72,12 +72,12 @@ paths:
                     properties:
                       id:
                         type: integer
-                        firstname:
-                          type: string
-                          example: John
-                        lastname:
-                          type: string
-                          example: Doe
+                      firstname:
+                        type: string
+                        example: John
+                      lastname:
+                        type: string
+                        example: Doe
 
         400:
           description: bad request
@@ -104,17 +104,13 @@ paths:
                   type: string
                   required: true
       responses:
-        200:
+        201:
           description: Logging in was successful
-          headers:
-            X-New-Bearer-Token:
-              schema:
-                type: string
-              description: JWT Bearer Token
           content:
             text/plain:
               schema:
                 type: string
+                description: Bearer JWT
 
         400:
           description: bad request
@@ -146,74 +142,74 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    date:
-                      type: string
-                      example: 2021-11-10
-                      description: date
-                    from:
-                      type: string
-                      example: 12:10:00
-                    to:
-                      type: string
-                      example: 12:55:00
-                    room:
-                      type: string
-                      example: G053
-                    cancelled:
-                      type: boolean
-                      example: false
-                    substitue:
-                      type: boolean
-                      example: true
-                    substituted:
+                type: dictionary
+                properties:
+                  hours:
+                    type: array
+                    items:
                       type: object
-                      description: the original lesson
                       properties:
+                        date:
+                          type: string
+                          example: 2021-11-10
+                          description: date
+                        hour:
+                          type: number
+                          description: hour id (see GET /schedule/hours)
                         room:
                           type: string
-                          example: G036
+                          example: G053
+                        cancelled:
+                          type: boolean
+                          example: false
+                        substitue:
+                          type: boolean
+                          example: true
+                        substituted:
+                          type: object
+                          description: the original lesson
+                          properties:
+                            room:
+                              type: string
+                              example: G036
+                            subject:
+                              type: object
+                              properties:
+                                abbreviation:
+                                  type: string
+                                  example: E
+                                name:
+                                  type: string
+                                  example: English
+                                label:
+                                  type: string
+                                  example: E9
+                              teachers:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    abbreviation:
+                                      type: string
+                                      example: D2
+                                    firstname:
+                                      type: string
+                                      example: John2
+                                    lastname:
+                                      type: string
+                                      example: Doe2
                         subject:
                           type: object
                           properties:
                             abbreviation:
                               type: string
-                              example: E
+                              example: CS
                             name:
                               type: string
-                              example: English
+                              example: Computer Science
                             label:
                               type: string
-                              example: E9
-                          teachers:
-                            type: array
-                            items:
-                              type: object
-                              properties:
-                                abbreviation:
-                                  type: string
-                                  example: D2
-                                firstname:
-                                  type: string
-                                  example: John2
-                                lastname:
-                                  type: string
-                                  example: Doe2
-                    subject:
-                      type: object
-                      properties:
-                        abbreviation:
-                          type: string
-                          example: CS
-                        name:
-                          type: string
-                          example: Computer Science
-                        label:
-                          type: string
-                          example: CS9
+                              example: CS9
         400:
           description: bad request
         401:
@@ -222,3 +218,38 @@ paths:
           description: the Schulmanager servers returned something the server couldn't handle
         504:
           description: the Schulmanager servers didn't respond
+
+  /schedule/hours:
+    get:
+      security:
+        - bearerAuth: [ ]
+        responses:
+          200:
+            description: fetched hours
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: number
+                        description: hour id
+                      number:
+                        type: string
+                        description: "number"/display name
+                      from:
+                        type: string
+                        description: time of the begin (format HH:mm:ss)
+                      until:
+                        type: string
+                        description: time of the end (format HH:mm:ss)
+          400:
+            description: bad request
+          401:
+            description: logging in first is required
+          502:
+            description: the Schulmanager servers returned something the server couldn't handle
+          504:
+            description: the Schulmanager servers didn't respond
