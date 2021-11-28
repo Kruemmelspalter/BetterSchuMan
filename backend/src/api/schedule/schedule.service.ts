@@ -69,7 +69,7 @@ export class ScheduleService {
                 room: x.originalLessons[0].room.name,
                 subject: {
                   abbreviation: x.originalLessons[0].subject.abbreviation,
-                  name: x.originalLessons[0].subject.abbreviation,
+                  name: x.originalLessons[0].subject.name,
                   label: x.originalLessons[0].subjectLabel,
                 },
                 teachers: x.originalLessons[0].teachers,
