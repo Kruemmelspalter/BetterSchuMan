@@ -56,9 +56,13 @@
         "warn",
         "single"
       ],
-      "semi": [
-        "warn"
-      ]
+      "semi": "warn",
+      "no-trailing-spaces": "warn",
+      "indent": [
+        "warn",
+        2
+      ],
+      "block-spacing": "warn"
     }
   },
   "browserslist": [

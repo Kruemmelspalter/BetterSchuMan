@@ -11,7 +11,7 @@
     <div id="content">
       <router-view />
     </div>
-    <SidebarComponent id="sidebar" />
+    <SidebarComponent v-if="$route.path !=='/login'" id="sidebar" />
   </div>
 </template>
 

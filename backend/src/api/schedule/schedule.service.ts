@@ -28,7 +28,10 @@ export class ScheduleService {
       'get-actual-lessons',
       {
         student: {
-          id: userInfo.body.user.associatedStudent.id,
+          id:
+            userInfo.body.user.associatedParents.length > 0
+              ? userInfo.body.user.associatedParents[0].student.id
+              : userInfo.body.user.associatedStudent.id,
         },
         start: scheduleId.start,
         end: scheduleId.end,

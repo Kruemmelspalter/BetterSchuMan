@@ -42,6 +42,7 @@ export default {
 
 .cancelled {
   background-color: var(--color-text-accent-2);
+  text-decoration: line-through;
 }
 
 .cancelled > span {
@@ -59,6 +60,7 @@ export default {
 .room {
   margin: auto;
 }
+
 .event {
   color: var(--color-text-accent-2);
   font-size: 1.5vh;
