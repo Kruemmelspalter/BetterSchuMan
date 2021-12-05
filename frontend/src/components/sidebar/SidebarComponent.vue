@@ -15,13 +15,13 @@
 </template>
 
 <script>
-import ScheduleComponent from "@/components/sidebar/ScheduleComponent";
-import CalendarComponent from "@/components/sidebar/CalendarComponent";
-import NotificationsComponent from "@/components/sidebar/NotificationsComponent";
-import ChatComponent from "@/components/sidebar/ChatComponent";
+import ScheduleComponent from '@/components/sidebar/ScheduleSidebar';
+import CalendarComponent from '@/components/sidebar/CalendarComponent';
+import NotificationsComponent from '@/components/sidebar/NotificationsComponent';
+import ChatComponent from '@/components/sidebar/ChatComponent';
 
 export default {
-  name: "SidebarComponent",
+  name: 'SidebarComponent',
   components: { ChatComponent, NotificationsComponent, CalendarComponent, ScheduleComponent },
   data() {
     return {

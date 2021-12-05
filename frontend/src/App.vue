@@ -17,31 +17,31 @@
 
 <script>
 
-import SidebarComponent from "@/components/sidebar/SidebarComponent";
-import superagent from "superagent";
-import UserInfoLink from "@/components/UserInfoLink";
+import SidebarComponent from '@/components/sidebar/SidebarComponent';
+import superagent from 'superagent';
+import UserInfoLink from '@/components/UserInfoLink';
 
 export default {
-  name: "App",
+  name: 'App',
   components: { UserInfoLink, SidebarComponent },
   beforeMount() {
-    this.$store.commit('setToken', localStorage.getItem("token"));
+    this.$store.commit('setToken', localStorage.getItem('token'));
 
     if (this.$store.state.token === null) {
-      if (this.$route.path !== "/login") this.$router.push("/login");
-    } else if (this.$route.path === "/login") this.$router.push("/");
+      if (this.$route.path !== '/login') this.$router.push('/login');
+    } else if (this.$route.path === '/login') this.$router.push('/');
 
     document.title = `SchuMan: ${this.$route.name || this.$route.path}`;
 
     superagent
-      .get("/api/session")
+      .get('/api/session')
       .ok(_ => true)
-      .auth(this.$store.state.token, { type: "bearer" })
+      .auth(this.$store.state.token, { type: 'bearer' })
       .send()
       .then(res => {
         if (res.status !== 200) {
-          localStorage.removeItem("token");
-          this.$router.push("/login");
+          localStorage.removeItem('token');
+          this.$router.push('/login');
           return;
         }
         this.$store.commit('setUserInfo', res.body);

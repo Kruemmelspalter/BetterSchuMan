@@ -21,7 +21,7 @@
 
 <script>
 export default {
-  name: "LessonThumbnail",
+  name: 'LessonThumbnail',
   props: {
     lesson: {
       type: Object,

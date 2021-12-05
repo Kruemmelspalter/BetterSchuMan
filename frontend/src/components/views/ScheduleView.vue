@@ -12,101 +12,34 @@
       </button>
     </div>
 
-    <table id="schedule">
-      <tr>
-        <th />
-        <th v-for="d in weekdays" :key="d.toMillis()" scope="col">{{ d.toLocaleString({
-          day: "2-digit",
-          month: "2-digit",
-          year: "2-digit"
-        }) }}
-        </th>
-      </tr>
-      <tr v-for="h in hours" :key="Math.random().toString()+h.from">
-        <th scope="row">{{ h.number }}</th>
-        <td v-for="d in weekdays" :key="d.toMillis()" class="lesson">
-
-          <LessonThumbnail v-for="l in lessonsByDayAndHour(d,h)" :key="Math.random()*l.hour" :lesson="l" />
-        </td>
-
-      </tr>
-    </table>
+    <ScheduleComponent :days="days"/>
   </div>
 </template>
 
 <script>
-
-import * as superagent from "superagent";
-import { DateTime } from "luxon";
-import LessonThumbnail from "@/components/views/LessonThumbnail";
+import ScheduleComponent from '@/components/ScheduleComponent';
+import { DateTime } from 'luxon';
 
 export default {
-  name: "ScheduleView",
-  components: { LessonThumbnail },
-  data() {
+  name: 'ScheduleView',
+  components: { ScheduleComponent },
+  data: function() {
     return {
-      monday: DateTime.now().startOf("week"),
-      hoursData: [],
-      scheduleData: { hours: [] },
+      monday: DateTime.now().startOf('week'),
     };
-  },
-  mounted() {
-    superagent
-      .get("/api/schedule/hours")
-      .ok(_ => true)
-      .auth(this.$store.state.token, { type: "bearer" })
-      .send()
-      .then(res => {
-        if (res.status !== 200) {
-          localStorage.removeItem("token");
-          this.$router.push("/login");
-          return;
-        }
-        this.hoursData = res.body;
-      });
-    setTimeout(this.loadSchedule, 1000);
-  },
-  computed: {
-    hours() {
-      return [...this.hoursData].sort((a, b) =>
-        DateTime.fromISO(a.from).toMillis() - DateTime.fromISO(b.from).toMillis());
-
-    },
-    weekdays() {
-      return Array.from({ length: 5 }, (_, i) => {
-        return this.monday.plus({ days: i });
-      });
-    },
   },
   methods: {
     changeWeek(amount) {
-      this.monday = this.monday.plus({ weeks: amount });
-      this.loadSchedule();
+      this.monday = this.monday.plus({ weeks: amount }).startOf('week');
     },
-    loadSchedule() {
-      superagent.get("/api/schedule")
-        .ok(_ => true)
-        .auth(this.$store.state.token, { type: "bearer" })
-        .query({
-          start: this.monday.toISODate(),
-          end: this.monday.plus({ days: 5 }).toISODate(),
-        })
-        .send()
-        .then(res => {
-          if (res.status !== 200) {
-            localStorage.removeItem("token");
-            this.$router.push("/login");
-            return;
-          }
-          this.scheduleData = res.body;
-        });
-    },
-    lessonsByDayAndHour(day, hour) {
-      return this.scheduleData.hours.filter(l => l.hour === hour.id && l.date === day.toISODate());
+  },
+  computed: {
+    days() {
+      return Array.from({ length: 5 }, (_, i) =>
+        this.monday.plus({ days: i }));
     },
   },
 };
-
 </script>
 
 <style scoped>
@@ -132,33 +65,5 @@ export default {
 #label {
   margin: auto;
   font-size: 2vh;
-}
-
-#schedule {
-  grid-row-start: schedule-start;
-  grid-row-end: schedule-end;
-  grid-column-start: schedule-start;
-  grid-column-end: schedule-end;
-}
-
-table, th, td {
-  border: 1px solid var(--color-text);
-  border-collapse: collapse;
-}
-
-
-table > * {
-  font-size: 2vh;
-}
-
-@media only screen and (orientation: portrait) {
-  table > * {
-    font-size: 1vh;
-  }
-}
-
-.lesson {
-  padding: 1%;
-  max-width: 5vw;
 }
 </style>
