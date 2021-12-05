@@ -1,6 +1,8 @@
 <template>
   <div id="app">
-    <div />
+    <div id="module-sel">
+      <ModuleSelector />
+    </div>
     <div id="schuman_link">
       <router-link to="/">
         <span class="material-icons">school</span>
@@ -20,10 +22,11 @@
 import SidebarComponent from '@/components/sidebar/SidebarComponent';
 import superagent from 'superagent';
 import UserInfoLink from '@/components/UserInfoLink';
+import ModuleSelector from '@/components/ModuleSelector';
 
 export default {
   name: 'App',
-  components: { UserInfoLink, SidebarComponent },
+  components: { ModuleSelector, UserInfoLink, SidebarComponent },
   beforeMount() {
     this.$store.commit('setToken', localStorage.getItem('token'));
 
@@ -52,6 +55,16 @@ export default {
 </script>
 
 <style scoped>
+
+#module-sel {
+  background-color: var(--color-content-background);
+  width: 100%;
+  height: 100%;
+}
+#module-sel > select {
+  margin-top: 2%;
+  float: right;
+}
 
 #app {
   display: grid;
