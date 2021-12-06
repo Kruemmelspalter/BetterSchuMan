@@ -2,8 +2,6 @@ FROM node:lts
 
 WORKDIR /opt/betterschuman
 
-USER nobody
-
 COPY entrypoint.sh .
 RUN chmod ug+x entrypoint.sh
 
@@ -24,4 +22,6 @@ RUN cp -r /tmp/betterschuman/backend/dist/* .
 RUN cp -r /tmp/betterschuman/frontend/dist static
 
 RUN rm -r /tmp/betterschuman
+
+USER nobody
 ENTRYPOINT ["/opt/betterschuman/entrypoint.sh"]
