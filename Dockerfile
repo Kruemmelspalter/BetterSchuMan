@@ -3,7 +3,7 @@ FROM node:lts
 WORKDIR /opt/betterschuman
 
 COPY entrypoint.sh .
-RUN chmod ug+x entrypoint.sh
+RUN chmod ugo+x entrypoint.sh
 
 COPY backend/package*.json .
 
