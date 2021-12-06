@@ -26,6 +26,7 @@ export class LoggerInterceptor implements NestInterceptor {
       id: id,
       time: begin.getTime(),
       type: 'request',
+      path: request.url,
     });
 
     const { statusCode } = context.switchToHttp().getResponse();
@@ -38,6 +39,7 @@ export class LoggerInterceptor implements NestInterceptor {
           time: end.getTime(),
           type: 'response',
           status: statusCode,
+          path: request.url,
         });
       }),
     );
