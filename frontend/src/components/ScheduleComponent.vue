@@ -2,15 +2,23 @@
   <table id="schedule">
     <tr>
       <th />
-      <th v-for="d in days" :key="d.toMillis()" scope="col">{{ d.toISODate() }}
+      <th v-for="d in days" :key="d.toMillis()" scope="col">
+        {{ d.toLocaleString({ weekday: 'long' }) }}
+        <br />
+        {{ d.toLocaleString({ day: '2-digit', month: '2-digit', year: '2-digit' }) }}
       </th>
     </tr>
     <tr v-for="h in hours" :key="Math.random().toString()+h.from">
-      <th scope="row">{{ h.number }}</th>
+      <th scope="row">
+        <span class="hourTime">{{ h.from }}</span>
+        <br />
+        <span class="hourNumber">{{ h.number }}</span>
+        <br />
+        <span class="hourTime">{{ h.until }}</span>
+      </th>
       <td v-for="d in days" :key="d.toMillis()" class="lesson">
         <LessonThumbnail v-for="l in lessonsByDayAndHour(d,h)" :key="Math.random()*l.hour" :lesson="l" />
       </td>
-
     </tr>
   </table>
 </template>
@@ -112,5 +120,8 @@ table > * {
 .lesson {
   padding: 2%;
   max-width: 10vw;
+}
+.hourTime {
+  font-size: 1.5vh;
 }
 </style>
