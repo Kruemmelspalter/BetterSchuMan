@@ -9,7 +9,7 @@
       </th>
     </tr>
     <tr v-for="h in hours" :key="Math.random().toString()+h.from">
-      <th scope="row">
+      <th scope="row" class="hour">
         <span class="hourTime">{{ h.from }}</span>
         <br />
         <span class="hourNumber">{{ h.number }}</span>
@@ -121,7 +121,12 @@ table > * {
   padding: 2%;
   max-width: 10vw;
 }
+
 .hourTime {
-  font-size: 1.5vh;
+  font-size: 1.25vh;
+}
+
+.hour {
+  line-height: 80%;
 }
 </style>

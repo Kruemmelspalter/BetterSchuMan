@@ -75,4 +75,8 @@ export default {
   justify-content: center;
   justify-items: center;
 }
+
+#schedule {
+min-width: 50%;
+}
 </style>
