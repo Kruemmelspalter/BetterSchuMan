@@ -2,6 +2,8 @@ FROM node:lts
 
 WORKDIR /opt/betterschuman
 
+USER nobody
+
 COPY entrypoint.sh .
 RUN chmod ug+x entrypoint.sh
 
