@@ -4,7 +4,7 @@
 
 <script>
 export default {
-  name: "NotificationsComponent",
+  name: 'ChatComponent',
 };
 </script>
 

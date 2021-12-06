@@ -14,10 +14,10 @@
 
 <script>
 export default {
-  name: "UserInfoLink",
+  name: 'UserInfoLink',
   methods: {
     logout() {
-      localStorage.removeItem("token");
+      localStorage.removeItem('token');
       document.location.reload();
     },
   },
@@ -28,7 +28,7 @@ export default {
   },
   computed: {
     name() {
-      return (this.$store.state.userinfo["firstname"] || "") + " " + (this.$store.state.userinfo["lastname"] || "");
+      return (this.$store.state.userinfo['firstname'] || '') + ' ' + (this.$store.state.userinfo['lastname'] || '');
     },
   },
   mounted() {

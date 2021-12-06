@@ -17,55 +17,55 @@
 </template>
 
 <script>
-import superagent from "superagent";
+import superagent from 'superagent';
 
 export default {
-  name: "LoginView",
+  name: 'LoginView',
   data() {
-    let token = localStorage.getItem("token");
+    let token = localStorage.getItem('token');
     return {
       token: token,
-      username: "",
-      password: "",
+      username: '',
+      password: '',
       invalidCreds: false,
       loginError: false,
     };
   },
   mounted() {
     if (this.token === null) {
-      if (this.$route.path !== "/login") this.$router.push("/login");
-    } else if (this.$route.path === "/login") this.$router.push("/");
+      if (this.$route.path !== '/login') this.$router.push('/login');
+    } else if (this.$route.path === '/login') this.$router.push('/');
   },
   methods: {
     async login() {
       let res = await superagent
-        .post("/api/session")
+        .post('/api/session')
         .ok(_ => true)
         .send({ username: this.username, password: this.password });
       if (res.status === 401) {
         this.invalidCreds = true;
         return;
-      } else if (res.status !== 200) {
+      } else if (res.status >= 400) {
         this.loginError = true;
         return;
       }
-      const token = res.header["x-new-bearer-token"];
-      if (token === undefined || token === null || token === "") {
+      const token = res.text;
+      if (!token || token === '') {
         this.loginError = true;
         return;
       }
-      localStorage.setItem("token", token);
+      localStorage.setItem('token', token);
       this.$store.commit('setToken', token);
       {
         const res = await superagent
-          .get("/api/session")
+          .get('/api/session')
           .ok(_ => true)
-          .auth(this.$store.state.token, { type: "bearer" })
+          .auth(this.$store.state.token, { type: 'bearer' })
           .send();
         if (res.status !== 200) return;
         this.$store.commit('setUserInfo', res.body);
       }
-      await this.$router.push("/");
+      await this.$router.push('/');
 
     },
   },

@@ -1,10 +1,11 @@
-import Vue from "vue";
-import App from "./App.vue";
-import IndexView from "@/components/views/IndexView";
-import VueRouter from "vue-router";
-import LoginView from "@/components/views/LoginView";
-import UserInfoView from "@/components/views/UserInfoView";
-import Vuex from "vuex";
+import Vue from 'vue';
+import App from './App.vue';
+import IndexView from '@/components/views/IndexView';
+import VueRouter from 'vue-router';
+import LoginView from '@/components/views/LoginView';
+import UserInfoView from '@/components/views/UserInfoView';
+import Vuex from 'vuex';
+import ScheduleView from '@/components/views/ScheduleView';
 
 Vue.config.productionTip = false;
 
@@ -13,9 +14,10 @@ Vue.use(Vuex);
 
 const router = new VueRouter({
   routes: [
-    { path: "/", component: IndexView, name: "Dashboard" },
-    { path: "/login", component: LoginView, name: "Login" },
-    { path: "/userinfo", component: UserInfoView, name: "Profile" }
+    { path: '/', component: IndexView, name: 'Dashboard' },
+    { path: '/login', component: LoginView, name: 'Login' },
+    { path: '/userinfo', component: UserInfoView, name: 'Profile' },
+    { path: '/schedule', component: ScheduleView, name: 'Schedule' }
   ],
 });
 router.afterEach(() => {
@@ -30,6 +32,8 @@ new Vue({
       return {
         token: null,
         userinfo: {},
+        lessons: [],
+        hours: [],
       };
     },
     mutations: {
@@ -39,7 +43,13 @@ new Vue({
       setUserInfo(state, userinfo) {
         state.userinfo = userinfo;
       },
+      addLessonInfo(state, lessonInfo) {
+        state.lessons = [...state.lessons, ...lessonInfo];
+      },
+      setHoursData(state, hoursData) {
+        state.hours = hoursData;
+      },
     },
   }),
   render: (h) => h(App),
-}).$mount("#app");
+}).$mount('#app');

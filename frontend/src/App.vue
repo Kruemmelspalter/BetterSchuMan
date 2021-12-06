@@ -1,6 +1,8 @@
 <template>
   <div id="app">
-    <div />
+    <div id="module-sel">
+      <ModuleSelector />
+    </div>
     <div id="schuman_link">
       <router-link to="/">
         <span class="material-icons">school</span>
@@ -11,37 +13,38 @@
     <div id="content">
       <router-view />
     </div>
-    <SidebarComponent id="sidebar" />
+    <SidebarComponent v-if="$route.path !=='/login'" id="sidebar" />
   </div>
 </template>
 
 <script>
 
-import SidebarComponent from "@/components/SidebarComponent";
-import superagent from "superagent";
-import UserInfoLink from "@/components/UserInfoLink";
+import SidebarComponent from '@/components/sidebar/SidebarComponent';
+import superagent from 'superagent';
+import UserInfoLink from '@/components/UserInfoLink';
+import ModuleSelector from '@/components/ModuleSelector';
 
 export default {
-  name: "App",
-  components: { UserInfoLink, SidebarComponent },
-  mounted() {
-    this.$store.commit('setToken', localStorage.getItem("token"));
+  name: 'App',
+  components: { ModuleSelector, UserInfoLink, SidebarComponent },
+  beforeMount() {
+    this.$store.commit('setToken', localStorage.getItem('token'));
 
     if (this.$store.state.token === null) {
-      if (this.$route.path !== "/login") this.$router.push("/login");
-    } else if (this.$route.path === "/login") this.$router.push("/");
+      if (this.$route.path !== '/login') this.$router.push('/login');
+    } else if (this.$route.path === '/login') this.$router.push('/');
 
     document.title = `SchuMan: ${this.$route.name || this.$route.path}`;
 
     superagent
-      .get("/api/session")
+      .get('/api/session')
       .ok(_ => true)
-      .auth(this.$store.state.token, { type: "bearer" })
+      .auth(this.$store.state.token, { type: 'bearer' })
       .send()
       .then(res => {
         if (res.status !== 200) {
-          localStorage.removeItem("token");
-          this.$router.push("/login");
+          localStorage.removeItem('token');
+          this.$router.push('/login');
           return;
         }
         this.$store.commit('setUserInfo', res.body);
@@ -52,6 +55,16 @@ export default {
 </script>
 
 <style scoped>
+
+#module-sel {
+  background-color: var(--color-content-background);
+  width: 100%;
+  height: 100%;
+}
+#module-sel > select {
+  margin-top: 2%;
+  float: right;
+}
 
 #app {
   display: grid;

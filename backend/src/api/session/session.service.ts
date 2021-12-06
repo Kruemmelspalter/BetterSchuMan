@@ -1,48 +1,39 @@
-import { HttpException, Injectable } from '@nestjs/common';
+import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { CreateSessionDto } from './dto/create-session.dto';
-import * as superagent from 'superagent';
 import { Session } from './entities/session.entity';
+import { request } from '../../schuman';
 
 @Injectable()
 export class SessionService {
-  async login(createSessionDto: CreateSessionDto): Promise<Session> {
-    const res = await superagent
-      .post('https://login.schulmanager-online.de/api/login')
-      .ok((_) => true)
-      .send({
+  private readonly logger = new Logger(SessionService.name);
+  async login(
+    createSessionDto: CreateSessionDto,
+    requestId: string | string[],
+  ): Promise<Session> {
+    this.logger.log({ id: requestId });
+    const { body: res } = await request(
+      'POST',
+      '/login',
+      {
         emailOrUsername: createSessionDto.username,
         password: createSessionDto.password,
-      });
-
-    if (!res) throw new HttpException('Bad Gateway', 502);
-    if (res.statusCode != 200)
-      switch (res.statusCode) {
-        case 401:
-          throw new HttpException('Unauthorized', 401);
-        default:
-          throw new HttpException('Error', res.statusCode);
-      }
-
-    return res.body['jwt'];
+      },
+      undefined,
+      requestId,
+    );
+    return res.jwt;
   }
 
-  async getSessionInfo(session: Session) {
-    const res = await superagent
-      .post('https://login.schulmanager-online.de/api/login-status')
-      .auth(session.jwt, { type: 'bearer' })
-      .send();
-    const data = res.body;
-
-    if (!data['isAuthenticated']) {
-      throw new HttpException('Unauthorized', 401);
-    }
-    if (res.statusCode != 200)
-      switch (res.statusCode) {
-        case 401:
-          throw new HttpException('Unauthorized', 401);
-        default:
-          throw new HttpException('Error', res.statusCode);
-      }
-    return data['user'];
+  async getSessionInfo(session: Session, requestId: string | string[]) {
+    this.logger.log({ id: requestId });
+    const { body: res } = await request(
+      'POST',
+      '/login-status',
+      {},
+      session.jwt,
+      requestId,
+    );
+    if (!res.isAuthenticated) throw new UnauthorizedException();
+    return res.user;
   }
 }

@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "core-js": "^3.19.1",
+    "luxon": "^2.1.1",
     "superagent": "^6.1.0",
     "vue": "^2.6.11",
     "vue-router": "^3.5.3",
@@ -37,6 +38,7 @@
       "parser": "babel-eslint"
     },
     "rules": {
+      "no-console": "warn",
       "no-unused-vars": [
         "error",
         {
@@ -49,7 +51,18 @@
           "functions": "never",
           "objects": "always-multiline"
         }
-      ]
+      ],
+      "quotes": [
+        "warn",
+        "single"
+      ],
+      "semi": "warn",
+      "no-trailing-spaces": "warn",
+      "indent": [
+        "warn",
+        2
+      ],
+      "block-spacing": "warn"
     }
   },
   "browserslist": [

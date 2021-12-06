@@ -5,7 +5,7 @@ WORKDIR /opt/betterschuman
 COPY entrypoint.sh .
 RUN chmod ug+x entrypoint.sh
 
-COPY backend/package.json .
+COPY backend/package*.json .
 
 RUN yarn install --production
 
