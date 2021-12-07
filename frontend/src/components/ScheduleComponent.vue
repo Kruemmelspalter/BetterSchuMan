@@ -68,29 +68,28 @@ export default {
   methods: {
     loadSchedule() {
       const days = [...this.days].sort((a, b) => Math.sign(a.toMillis() - b.toMillis()));
-      let compute = false;
+
       for (const d in days) {
         if (this.$store.state.lessons.filter(x => x.date === days[d].toISODate()).length === 0) {
-          compute = true;
+          superagent.get('/api/schedule')
+            .ok(_ => true)
+            .auth(this.$store.state.token, { type: 'bearer' })
+            .query({
+              start: days[d].toISODate(),
+              end: days[d].toISODate(),
+            })
+            .send()
+            .then(res => {
+              if (res.status !== 200) {
+                localStorage.removeItem('token');
+                this.$router.push('/login');
+                return;
+              }
+              this.$store.commit('addLessonInfo', res.body.hours);
+            });
         }
       }
-      if (!compute) return;
-      superagent.get('/api/schedule')
-        .ok(_ => true)
-        .auth(this.$store.state.token, { type: 'bearer' })
-        .query({
-          start: days[0].toISODate(),
-          end: days[days.length - 1].toISODate(),
-        })
-        .send()
-        .then(res => {
-          if (res.status !== 200) {
-            localStorage.removeItem('token');
-            this.$router.push('/login');
-            return;
-          }
-          this.$store.commit('addLessonInfo', res.body.hours);
-        });
+
     },
     lessonsByDayAndHour(day, hour) {
       return this.$store.state.lessons.filter(l => l.hour === hour.id && l.date === day.toISODate());
