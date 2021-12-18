@@ -13,12 +13,12 @@
       </th>
     </tr>
     <tr v-for="h in hours" :key="Math.random().toString()+h.from">
-      <th scope="row" class="hour">
-        <span class="hourTime">{{ h.from }}</span>
+      <th class="hour" scope="row">
+        <span class="hourTime">{{ convertISO(h.from).toLocaleString({ hour: 'numeric', minute: 'numeric' }) }}</span>
         <br />
         <span class="hourNumber">{{ h.number }}</span>
         <br />
-        <span class="hourTime">{{ h.until }}</span>
+        <span class="hourTime">{{ convertISO(h.until).toLocaleString({ hour: 'numeric', minute: 'numeric' }) }}</span>
       </th>
       <td v-for="d in days" :key="d.toMillis()" class="lesson">
         <LessonThumbnail v-for="l in lessonsByDayAndHour(d,h)" :key="Math.random()*l.hour" :lesson="l" />
@@ -101,6 +101,9 @@ export default {
     },
     lessonsByDayAndHour(day, hour) {
       return this.$store.state.lessons.filter(l => l.hour === hour.id && l.date === day.toISODate());
+    },
+    convertISO(time) {
+      return DateTime.fromISO(time);
     },
   },
 };
