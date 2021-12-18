@@ -8,23 +8,23 @@
       <button class="tabbutton material-icons" @click="activate(-1)">close</button>
     </div>
     <div id="sidebarcontent">
-      <schedule-component v-show="activeTab === 0" class="tabcontent" />
-      <calendar-component v-show="activeTab === 1" class="tabcontent" />
-      <notifications-component v-show="activeTab === 2" class="tabcontent" />
-      <chat-component v-show="activeTab === 3" class="tabcontent" />
+      <ScheduleSidebar v-show="activeTab === 0" class="tabcontent" />
+      <CalendarComponent v-show="activeTab === 1" class="tabcontent" />
+      <NotificationsComponent v-show="activeTab === 2" class="tabcontent" />
+      <ChatComponent v-show="activeTab === 3" class="tabcontent" />
     </div>
   </div>
 </template>
 
 <script>
-import ScheduleComponent from '@/components/sidebar/ScheduleSidebar';
+import ScheduleSidebar from '@/components/sidebar/ScheduleSidebar';
 import CalendarComponent from '@/components/sidebar/CalendarComponent';
 import NotificationsComponent from '@/components/sidebar/NotificationsComponent';
 import ChatComponent from '@/components/sidebar/ChatComponent';
 
 export default {
   name: 'SidebarComponent',
-  components: { ChatComponent, NotificationsComponent, CalendarComponent, ScheduleComponent },
+  components: { ScheduleSidebar, ChatComponent, NotificationsComponent, CalendarComponent },
   data() {
     return {
       activeTab: -1,
