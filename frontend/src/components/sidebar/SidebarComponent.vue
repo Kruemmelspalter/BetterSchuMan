@@ -26,13 +26,15 @@ export default {
   name: 'SidebarComponent',
   components: { ScheduleSidebar, ChatComponent, NotificationsComponent, CalendarComponent },
   data() {
+    const tabFromStorage = localStorage.getItem('activeTab');
     return {
-      activeTab: -1,
+      activeTab: tabFromStorage === undefined ? -1 : parseInt(tabFromStorage),
     };
   },
   methods: {
     activate(id) {
       this.activeTab = id;
+      localStorage.setItem('activeTab', id);
     },
   },
 };
