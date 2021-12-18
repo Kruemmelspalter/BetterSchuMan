@@ -81,9 +81,7 @@ export default {
             .send()
             .then(res => {
               if (res.status !== 200) {
-                localStorage.removeItem('token');
-                this.$router.push('/login');
-                return;
+                throw `couldn't load hours for day ${days[d].toISODate()}`;
               }
               this.$store.commit('addLessonInfo', res.body.hours);
             });
