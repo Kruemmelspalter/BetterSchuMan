@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div id="module-sel">
-      <ModuleSelector />
+      <ModuleSelector v-if="$route.path !== '/login'" />
     </div>
     <div id="schuman_link">
       <router-link to="/">
@@ -61,6 +61,7 @@ export default {
   width: 100%;
   height: 100%;
 }
+
 #module-sel > select {
   margin-top: 2%;
   float: right;
