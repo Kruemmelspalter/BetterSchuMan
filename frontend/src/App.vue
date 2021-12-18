@@ -68,7 +68,7 @@ export default {
 
 #app {
   display: grid;
-  grid-template-columns: 25% auto 30%;
+  grid-template-columns: 20% auto 30%;
   grid-template-rows: calc(100vh / 16) auto;
   height: 100vh;
   background: var(--color-background)

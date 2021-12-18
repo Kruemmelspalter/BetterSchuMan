@@ -7,6 +7,7 @@
       <button id="week_next" class="week_button material-icons" @click="changeDay(1)">
         navigate_next
       </button>
+      <router-link id="scheduleLink" to="/schedule">Schedule</router-link>
     </div>
     <br />
     <ScheduleComponent id="schedule" :days="[day]" />
@@ -46,7 +47,7 @@ export default {
             return;
           }
           this.$store.commit('addLessonInfo', res.body.hours);
-          let now = this.day||now;
+          let now = this.day || now;
 
           let lessons = this.$store.state.lessons.filter(x => x.date === now.toISODate());
           if (lessons.length === 0) return;
@@ -81,12 +82,16 @@ export default {
 
 <style scoped>
 #buttons {
-  display: flex;
-  justify-content: center;
-  justify-items: center;
+  /*display: flex;*/
+  /*justify-content: center;*/
+  /*justify-items: center;*/
+}
+#scheduleLink {
+  float: right;
+  font-size: .7em;
 }
 
 #schedule {
-min-width: 50%;
+  min-width: 50%;
 }
 </style>

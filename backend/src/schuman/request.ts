@@ -36,7 +36,7 @@ export async function request(
   let res = undefined;
   try {
     res = await superagent(method, api + url)
-      .timeout(5000)
+      .timeout(6000)
       .ok((_) => true)
       .auth(token, { type: 'bearer' })
       .send(data);
