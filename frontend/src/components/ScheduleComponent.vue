@@ -6,6 +6,10 @@
         {{ d.toLocaleString({ weekday: 'long' }) }}
         <br />
         {{ d.toLocaleString({ day: '2-digit', month: '2-digit', year: '2-digit' }) }}
+        <span v-if="loadingErrors[d.toISODate()]" class="loadingError">
+        <br />
+        couldn't load day
+      </span>
       </th>
     </tr>
     <tr v-for="h in hours" :key="Math.random().toString()+h.from">
@@ -37,6 +41,11 @@ export default {
     days: {
       type: Array,
     },
+  },
+  data() {
+    return {
+      loadingErrors: {},
+    };
   },
   watch: {
     days() {
@@ -81,6 +90,7 @@ export default {
             .send()
             .then(res => {
               if (res.status !== 200) {
+                this.loadingErrors[days[d].toISODate()] = true;
                 throw `couldn't load hours for day ${days[d].toISODate()}`;
               }
               this.$store.commit('addLessonInfo', res.body.hours);
@@ -125,5 +135,8 @@ table > * {
 
 .hour {
   line-height: 80%;
+}
+.loadingError {
+  background-color: var(--color-text-accent-2);
 }
 </style>
