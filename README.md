@@ -1,5 +1,5 @@
 # BetterSchuMan
-An alternative (and hopefully better) interface for the German school website Schulmanager Online (https://schulmanager-online.de).
+An alternative (and hopefully better) interface for the German school website [Schulmanager Online](https://schulmanager-online.de).
 It provides a simplified API at `/api` and a Web User Interface at `/`.
 
 ## Installation
