@@ -29,7 +29,10 @@ export async function request(
   api = 'https://login.schulmanager-online.de/api',
 ) {
   const logger = new Logger('request');
-  logger.log({ id: requestId });
+  logger.log({
+    id: requestId,
+    type: 'request',
+  });
   let res = undefined;
   try {
     res = await superagent(method, api + url)
@@ -39,10 +42,22 @@ export async function request(
       .send(data);
   } catch (e) {
     if (e.code === 'ECONNABORTED' && e.errno == 'ETIME') {
-      logger.error({ id: requestId, status: 504 });
+      logger.error({
+        id: requestId,
+        status: 504,
+        path: url,
+        method: method,
+        data: data,
+      });
       throw new GatewayTimeoutException();
     } else {
-      logger.error({ id: requestId, exception: e });
+      logger.error({
+        id: requestId,
+        exception: e,
+        path: url,
+        method: method,
+        data: data,
+      });
       throw e;
     }
   }

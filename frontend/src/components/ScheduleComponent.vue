@@ -6,15 +6,19 @@
         {{ d.toLocaleString({ weekday: 'long' }) }}
         <br />
         {{ d.toLocaleString({ day: '2-digit', month: '2-digit', year: '2-digit' }) }}
+        <span v-if="loadingErrors[d.toISODate()]" class="loadingError">
+        <br />
+        couldn't load day
+      </span>
       </th>
     </tr>
     <tr v-for="h in hours" :key="Math.random().toString()+h.from">
-      <th scope="row" class="hour">
-        <span class="hourTime">{{ h.from }}</span>
+      <th class="hour" scope="row">
+        <span class="hourTime">{{ convertISO(h.from).toLocaleString({ hour: 'numeric', minute: 'numeric' }) }}</span>
         <br />
         <span class="hourNumber">{{ h.number }}</span>
         <br />
-        <span class="hourTime">{{ h.until }}</span>
+        <span class="hourTime">{{ convertISO(h.until).toLocaleString({ hour: 'numeric', minute: 'numeric' }) }}</span>
       </th>
       <td v-for="d in days" :key="d.toMillis()" class="lesson">
         <LessonThumbnail v-for="l in lessonsByDayAndHour(d,h)" :key="Math.random()*l.hour" :lesson="l" />
@@ -37,6 +41,11 @@ export default {
     days: {
       type: Array,
     },
+  },
+  data() {
+    return {
+      loadingErrors: {},
+    };
   },
   watch: {
     days() {
@@ -81,9 +90,8 @@ export default {
             .send()
             .then(res => {
               if (res.status !== 200) {
-                localStorage.removeItem('token');
-                this.$router.push('/login');
-                return;
+                this.loadingErrors[days[d].toISODate()] = true;
+                throw `couldn't load hours for day ${days[d].toISODate()}`;
               }
               this.$store.commit('addLessonInfo', res.body.hours);
             });
@@ -93,6 +101,9 @@ export default {
     },
     lessonsByDayAndHour(day, hour) {
       return this.$store.state.lessons.filter(l => l.hour === hour.id && l.date === day.toISODate());
+    },
+    convertISO(time) {
+      return DateTime.fromISO(time);
     },
   },
 };
@@ -127,5 +138,8 @@ table > * {
 
 .hour {
   line-height: 80%;
+}
+.loadingError {
+  background-color: var(--color-text-accent-2);
 }
 </style>

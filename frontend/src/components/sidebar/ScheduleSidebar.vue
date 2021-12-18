@@ -46,7 +46,7 @@ export default {
             return;
           }
           this.$store.commit('addLessonInfo', res.body.hours);
-          const now = this.day||now;
+          let now = this.day||now;
 
           let lessons = this.$store.state.lessons.filter(x => x.date === now.toISODate());
           if (lessons.length === 0) return;
@@ -54,23 +54,23 @@ export default {
             DateTime.fromISO(this.$store.state.hours.filter(y => y.id === x.hour)[0].until) > now.plus({ minutes: 45 })
           );
           if (lessons.length === 0) {
-            this.day = now.plus({ days: 1 });
-            if (this.day.weekday === 6 || this.day.weekday === 7) {
-              this.day = now.plus({ weeks: 1 }).startOf('week').startOf('day');
+            now = now.plus({ days: 1 });
+            if (now.weekday === 6 || now.weekday === 7) {
+              now = now.plus({ weeks: 1 }).startOf('week').startOf('day');
             }
           }
+          this.day = now;
         });
     }
     let lessons = this.$store.state.lessons.filter(x => x.date === now.toISODate());
-    if (lessons.length === 0) return;
     lessons = lessons.filter(x =>
       DateTime.fromISO(this.$store.state.hours.filter(y => y.id === x.hour)[0].until) > now.plus({ minutes: 45 })
     );
     if (lessons.length === 0) {
-      this.day = now.plus({ days: 1 });
+      now = now.plus({ days: 1 });
     }
-    if (this.day.weekday === 6 || this.day.weekday === 7) {
-      this.day = this.day.plus({ weeks: 1 }).startOf('week').startOf('day');
+    if (now.weekday === 6 || now.weekday === 7) {
+      now = now.plus({ weeks: 1 }).startOf('week').startOf('day');
     }
     return {
       day: now,
