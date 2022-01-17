@@ -1,1 +1,5 @@
-export class CreateChatDto {}
+export class CreateChatDto {
+  recipientId: number;
+  text: string;
+  threadName: string;
+}

@@ -104,11 +104,12 @@ export async function calls(
       logger.error({
         id: requestId,
         status: res.body.results[0].status,
-        error: res.body.results[0].error,
+        error: res.body.results[0].error || ' ',
+        body: res.body,
       });
       throw new HttpException(
         res.body.results[0].error,
-        res.body.results[0].status,
+        res.body.results[0].status || ' ',
       );
     }
     logger.error({
@@ -142,6 +143,7 @@ export async function uploadFile(
       name: f.originalname,
     })
     .auth(token, { type: 'bearer' })
-    .send(f.buffer.toString());
+    .set('Content-Type', 'application/octet-stream')
+    .send(f.buffer);
   return res.body;
 }

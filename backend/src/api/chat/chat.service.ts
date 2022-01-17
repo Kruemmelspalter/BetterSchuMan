@@ -1,6 +1,7 @@
 import {
   BadGatewayException,
   Injectable,
+  InternalServerErrorException,
   Logger,
   NotFoundException,
 } from '@nestjs/common';
@@ -12,8 +13,45 @@ import { uploadFile } from '../../schuman/request';
 export class ChatService {
   private readonly logger = new Logger(ChatService.name);
 
-  create(createChatDto: CreateChatDto) {
-    return 'This action adds a new chat';
+  async create(
+    createChatDto: CreateChatDto,
+    files: Array<Express.Multer.File>,
+    token: string,
+    requestId: string | string[],
+  ) {
+    this.logger.log({ id: requestId });
+    const attach_strs = await Promise.all(
+      files.map((x) => {
+        return uploadFile(x, token);
+      }),
+    );
+    const allUsers = await this.findAllUsers(token, requestId);
+    const possibleUsers = allUsers.filter(
+      (x) => x.id === +createChatDto.recipientId,
+    );
+    if (possibleUsers.length !== 1) throw new InternalServerErrorException();
+    const user = possibleUsers[0];
+    await calls(
+      'messenger',
+      'create-thread',
+      {
+        subject: createChatDto.threadName,
+        users: [{ id: +createChatDto.recipientId }],
+        allowAnswers: true,
+        recipientOptions: [
+          {
+            name: user.name,
+            subtext: user.subtext,
+            type: 'user',
+            user: user,
+          },
+        ],
+        firstMessage: { text: createChatDto.text, attachments: attach_strs },
+      },
+      token,
+      requestId,
+    );
+    return;
   }
 
   async findAll(token: string, requestId: string | string[]) {

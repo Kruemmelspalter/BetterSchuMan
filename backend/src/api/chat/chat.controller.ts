@@ -7,6 +7,7 @@ import {
   Param,
   Post,
   Req,
+  UploadedFile,
   UploadedFiles,
   UseInterceptors,
 } from '@nestjs/common';
@@ -15,7 +16,8 @@ import { ChatService } from './chat.service';
 import { CreateChatDto } from './dto/create-chat.dto';
 import { checkAuth } from '../../schuman/checkAuth';
 import { SendMessageDto } from './dto/send-message.dto';
-import { FilesInterceptor } from '@nestjs/platform-express';
+import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
+import { uploadFile } from '../../schuman/request';
 
 @Controller('chat')
 export class ChatController {
@@ -24,10 +26,34 @@ export class ChatController {
   constructor(private readonly chatService: ChatService) {}
 
   @Post()
-  create(@Body() createChatDto: CreateChatDto, @Req() req: Request) {
+  @UseInterceptors(FilesInterceptor('files'))
+  create(
+    @Body() createChatDto: CreateChatDto,
+    @Req() req: Request,
+    @UploadedFiles() files: Array<Express.Multer.File>,
+  ) {
     const requestId = req.headers['X-BetterSchuMan-ID'];
     this.logger.log({ id: requestId });
-    return this.chatService.create(createChatDto);
+    return this.chatService.create(
+      createChatDto,
+      files,
+      checkAuth(req.headers['authorization']),
+      requestId,
+    );
+  }
+
+  @Post('upload')
+  @UseInterceptors(FileInterceptor('file'))
+  async upload(
+    @Body() body: Body,
+    @Req() req: Request,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    const requestId = req.headers['X-BetterSchuMan-ID'];
+    this.logger.log({ id: requestId });
+    const token = checkAuth(req.headers['authorization']);
+
+    return uploadFile(file, token);
   }
 
   @Post(':id')
