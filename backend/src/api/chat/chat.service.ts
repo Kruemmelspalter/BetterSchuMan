@@ -97,8 +97,8 @@ export class ChatService {
         text: x.text,
         sentTimestamp: x.createdAt,
         sender: {
-          firstname: x.firstname,
-          lastname: x.lastname,
+          firstname: x.sender.firstname,
+          lastname: x.sender.lastname,
         },
         attachments: x.attachments.map((x) => {
           const data = JSON.parse(x.file);

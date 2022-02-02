@@ -11,7 +11,7 @@
       <ScheduleSidebar v-show="activeTab === 0" class="tabcontent" />
       <CalendarComponent v-show="activeTab === 1" class="tabcontent" />
       <NotificationsComponent v-show="activeTab === 2" class="tabcontent" />
-      <ChatComponent v-show="activeTab === 3" class="tabcontent" />
+      <ChatSidebar v-show="activeTab === 3" class="tabcontent" />
     </div>
   </div>
 </template>
@@ -20,11 +20,11 @@
 import ScheduleSidebar from '@/components/sidebar/ScheduleSidebar';
 import CalendarComponent from '@/components/sidebar/CalendarComponent';
 import NotificationsComponent from '@/components/sidebar/NotificationsComponent';
-import ChatComponent from '@/components/sidebar/ChatComponent';
+import ChatSidebar from '@/components/sidebar/ChatSidebar';
 
 export default {
   name: 'SidebarComponent',
-  components: { ScheduleSidebar, ChatComponent, NotificationsComponent, CalendarComponent },
+  components: { ScheduleSidebar, ChatSidebar, NotificationsComponent, CalendarComponent },
   data() {
     const tabFromStorage = localStorage.getItem('activeTab');
     return {
