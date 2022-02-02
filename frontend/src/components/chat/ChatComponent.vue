@@ -1,12 +1,13 @@
 <template>
-  <div class="messages">
-    <message-component v-for="m in messages" :key="m.id" :message="m"/>
+  <div ref="messageContainer" class="messages">
+    <message-component v-for="m in messages" :key="m.id" :message="m" />
   </div>
 </template>
 
 <script>
 import superagent from 'superagent';
 import MessageComponent from '@/components/chat/MessageComponent';
+import { DateTime } from 'luxon';
 
 export default {
   name: 'ChatComponent',
@@ -16,7 +17,7 @@ export default {
       const threadMessages = this.$store.state.threadMessages[this.threadId];
       if (!threadMessages || threadMessages.length === 0) return [];
 
-      return threadMessages.slice().sort((x, y) => Math.sign(x.sentTimestamp - y.sentTimestamp));
+      return threadMessages.slice().sort((x, y) => Math.sign(DateTime.fromISO(x.sentTimestamp) - DateTime.fromISO(y.sentTimestamp)));
 
     },
   },
@@ -31,6 +32,7 @@ export default {
       deep: true,
       handler() {
         this.loadMessageData();
+        setTimeout(_ => this.$refs.messageContainer.scrollTop = this.$refs.messageContainer.scrollHeight, 500);
       },
     },
   },
