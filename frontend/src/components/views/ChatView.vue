@@ -24,16 +24,24 @@ import ChatComponent from '@/components/chat/ChatComponent';
 export default {
   name: 'ChatView',
   components: { ChatComponent, ThreadPreview },
+  data() {
+    return {
+      searchTerms: '',
+    };
+  },
   methods: {
     applySearch(event) {
-      console.log(event.target.value);
+      this.searchTerms = event.target.value;
     },
   },
   computed: {
     threads() {
       return this.$store.state.threads.slice().sort((x, y) => {
         return Math.sign(DateTime.fromISO(y.lastMessage) - DateTime.fromISO(x.lastMessage));
-      });
+      }).filter(x => x.subject.toLowerCase().includes(this.searchTerms.toLowerCase()) ||
+        x.sender.toLowerCase().includes(this.searchTerms.toLowerCase()) ||
+        x.recipients.toLowerCase().includes(this.searchTerms.toLowerCase())
+      );
     },
     threadTitle() {
       const threads = this.threads.filter(x => x.id === +this.$route.params.id);
