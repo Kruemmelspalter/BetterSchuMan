@@ -71,7 +71,7 @@ export default {
   grid-template-columns: [sidebar-start] 40% [sidebar-end content-start] auto [content-end];
   grid-template-rows: [search-start] 10% [search-end content-start] auto [content-end];
   min-height: 75vh;
-  margin: 5%;
+  margin: 5% 5% 0;
   width: 90%;
 }
 
