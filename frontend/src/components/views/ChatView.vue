@@ -1,7 +1,7 @@
 <template>
   <div id="container">
     <div id="search">
-      <input id="searchbox" maxlength="20" type="text" @change="applySearch($event)" />
+      <input id="searchbox" maxlength="20" type="text" v-model="searchTerms" />
     </div>
     <div id="threads">
       <router-link v-for="t in threads" :key="t.id" :to="`/chat/${t.id}`">
@@ -28,11 +28,6 @@ export default {
     return {
       searchTerms: '',
     };
-  },
-  methods: {
-    applySearch(event) {
-      this.searchTerms = event.target.value;
-    },
   },
   computed: {
     threads() {
