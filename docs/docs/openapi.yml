@@ -268,12 +268,16 @@ paths:
             schema:
               type: object
               properties:
+                recipientId:
+                  type: integer
+                threadName:
+                  type: string
                 text:
                   type: string
-                  description: message content
+                  description: content of first message
                 files:
                   type: array
-                  description: message attachments
+                  description: attachments of first message
                   items:
                     type: string
                     format: binary
