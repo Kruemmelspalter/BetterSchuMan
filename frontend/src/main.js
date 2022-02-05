@@ -55,9 +55,8 @@ const store = new Vuex.Store({
     setThreadsData(state, threads) {
       state.threads = threads;
     },
-    addThreadMessageData(state, [threadId, messages]) {
-      if (!state.threadMessages[threadId]) Vue.set(state.threadMessages, threadId, messages);
-
+    setThreadMessageData(state, [threadId, messages]) {
+      Vue.set(state.threadMessages, threadId, messages);
     },
 
   },
