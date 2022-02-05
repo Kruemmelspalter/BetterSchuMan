@@ -87,7 +87,7 @@ export default {
 #threads {
   grid-column: sidebar-start;
   grid-row: content-start;
-  overflow-x: scroll;
+  overflow-y: scroll;
   max-height: 75vh;
 }
 

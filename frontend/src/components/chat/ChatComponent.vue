@@ -120,7 +120,7 @@ export default {
 
 <style scoped>
 .messages {
-  overflow: scroll;
+  overflow-y: scroll;
   flex-basis: 100%;
 }
 
