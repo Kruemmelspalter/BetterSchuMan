@@ -31,7 +31,7 @@ export class ChatService {
     );
     if (possibleUsers.length !== 1) throw new InternalServerErrorException();
     const user = possibleUsers[0];
-    await calls(
+    const { body: body } = await calls(
       'messenger',
       'create-thread',
       {
@@ -51,7 +51,7 @@ export class ChatService {
       token,
       requestId,
     );
-    return;
+    return +body.thread.id;
   }
 
   async findAll(token: string, requestId: string | string[]) {

@@ -1,7 +1,10 @@
 <template>
   <div id="container">
-    <div id="search">
-      <input id="searchbox" maxlength="20" type="text" v-model="searchTerms" />
+    <div id="topbox">
+      <input id="searchbox" v-model="searchTerms" maxlength="20" type="text" />
+      <router-link to="/chat/new">
+        <button id="btn_thread"><span class="material-icons">edit</span> Create Thread</button>
+      </router-link>
     </div>
     <div id="threads">
       <router-link v-for="t in threads" :key="t.id" :to="`/chat/${t.id}`">
@@ -75,13 +78,17 @@ export default {
   width: 90%;
 }
 
-#search {
+#topbox {
   max-height: 100%;
   padding: 0 5% 5%;
+  display: flex;
+  flex-direction: column;
 }
 
-#searchbox {
+#topbox > * {
   max-width: 100%;
+  font-size: 18px;
+  margin: 2px auto;
 }
 
 #threads {

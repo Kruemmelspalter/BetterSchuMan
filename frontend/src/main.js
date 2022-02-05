@@ -7,6 +7,7 @@ import UserInfoView from '@/components/views/UserInfoView';
 import Vuex from 'vuex';
 import ScheduleView from '@/components/views/ScheduleView';
 import ChatView from '@/components/views/ChatView';
+import ThreadCreationView from '@/components/views/ThreadCreationView';
 
 Vue.config.productionTip = false;
 
@@ -20,6 +21,7 @@ const router = new VueRouter({
     { path: '/userinfo', component: UserInfoView, name: 'Profile' },
     { path: '/schedule', component: ScheduleView, name: 'Schedule' },
     { path: '/chat', component: ChatView, name: 'Chat' },
+    { path: '/chat/new', component: ThreadCreationView, name: 'New Thread' },
     { path: '/chat/:id', component: ChatView, name: 'Chat' }
   ],
 });
@@ -37,6 +39,7 @@ const store = new Vuex.Store({
       hours: [],
       threads: [],
       threadMessages: {},
+      chatUsers: [],
     };
   },
   mutations: {
@@ -57,6 +60,9 @@ const store = new Vuex.Store({
     },
     setThreadMessageData(state, [threadId, messages]) {
       Vue.set(state.threadMessages, threadId, messages);
+    },
+    setChatUsersData(state, users) {
+      state.chatUsers = users;
     },
 
   },
