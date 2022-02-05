@@ -4,12 +4,24 @@
       <message-component v-for="m in messages" :key="m.id" :message="m" />
     </div>
     <div>
-
       <textarea id="textinput" ref="textinput" v-model="messageText"
                 :rows="messageText.length === 0 ? 1 : 6 " cols="35"></textarea>
       <span id="btn_upload" class="material-icons" @click="clickAttachButton">attach_file</span>
       <span id="btn_send" class="material-icons" @click="sendMessage">send</span>
     </div>
+    <div>
+      <span v-for="f in files" id="filePreviews" :key="f.name">
+        <span class="material-icons">description</span>
+        {{ f.name }}
+      </span>
+    </div>
+    <input
+      ref="fileInput"
+      accept="image/*"
+      multiple
+      style="display: none"
+      type="file"
+      @change="onFilePicked($event)" />
   </div>
 </template>
 
@@ -38,6 +50,7 @@ export default {
   data() {
     return {
       messageText: '',
+      files: [],
     };
   },
   watch: {
@@ -58,11 +71,17 @@ export default {
       const msgText = this.messageText;
       this.messageText = '';
 
+      const files = this.files;
+      this.files = [];
+
+      if (msgText.length === 0 && files.length === 0) return;
+
       superagent
         .post(`/api/chat/${this.threadId}`)
         .ok(_ => true)
         .auth(this.$store.state.token, { type: 'bearer' })
         .field('text', msgText)
+        .field('files', files)
         .then(_ => {
           this.loadMessageData();
           this.scrollDownInChat();
@@ -85,6 +104,15 @@ export default {
     },
     scrollDownInChat() {
       this.$refs.messageContainer.scrollTop = this.$refs.messageContainer.scrollHeight;
+    },
+    clickAttachButton() {
+      this.$refs.fileInput.click();
+    },
+    onFilePicked(event) {
+      for (let i = 0; i < event.target.files.length; i++) {
+        this.files.push(event.target.files.item(i));
+      }
+      event.target.value = '';
     },
   },
 };
@@ -111,5 +139,9 @@ export default {
 
 #textinput {
   font-size: 16px;
+}
+
+#filePreviews {
+  font-size: 18px;
 }
 </style>
