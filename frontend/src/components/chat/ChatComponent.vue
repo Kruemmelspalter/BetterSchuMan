@@ -5,9 +5,11 @@
     </div>
     <div>
       <textarea id="textinput" ref="textinput" v-model="messageText"
-                :rows="messageText.length === 0 ? 1 : 6 " cols="35"></textarea>
-      <span id="btn_upload" class="material-icons" @click="clickAttachButton">attach_file</span>
-      <span id="btn_send" class="material-icons" @click="sendMessage">send</span>
+                :rows="messageText.length === 0 ? 1 : 6 " cols="30"></textarea>
+      <span id="btn_upload" class="material-icons button" @click="clickAttachButton">attach_file</span>
+      <span id="btn_send" :style="messageText.length === 0 && files.length === 0 ? 'cursor: not-allowed' : ''" class="material-icons button"
+            @click="sendMessage">send</span>
+      <span id="btn_reload" class="material-icons button" @click="loadMessageData">refresh</span>
     </div>
     <div>
       <span v-for="f in files" id="filePreviews" :key="f.name">
@@ -64,7 +66,7 @@ export default {
     },
   },
   mounted() {
-    this.loadMessageData();
+    setInterval(this.loadMessageData, 60000);
   },
   methods: {
     sendMessage() {
@@ -133,6 +135,9 @@ export default {
 
 #btn_send {
   margin: 0 0 0 5px;
+}
+
+.button {
   user-select: none;
   cursor: pointer;
 }
