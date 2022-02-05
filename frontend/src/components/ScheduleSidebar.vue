@@ -81,11 +81,11 @@ export default {
 </script>
 
 <style scoped>
-#buttons {
-  /*display: flex;*/
-  /*justify-content: center;*/
-  /*justify-items: center;*/
+#container {
+  overflow-y: scroll;
+  max-height: 90%;
 }
+
 #scheduleLink {
   float: right;
   font-size: .7em;
