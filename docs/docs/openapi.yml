@@ -136,7 +136,7 @@ paths:
                           example: 2021-11-10
                           description: date
                         hour:
-                          type: number
+                          type: integer
                           description: hour id (see GET /schedule/hours)
                         room:
                           type: string
@@ -166,20 +166,20 @@ paths:
                                 label:
                                   type: string
                                   example: E9
-                              teachers:
-                                type: array
-                                items:
-                                  type: object
-                                  properties:
-                                    abbreviation:
-                                      type: string
-                                      example: D2
-                                    firstname:
-                                      type: string
-                                      example: John2
-                                    lastname:
-                                      type: string
-                                      example: Doe2
+                            teachers:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  abbreviation:
+                                    type: string
+                                    example: D2
+                                  firstname:
+                                    type: string
+                                    example: John2
+                                  lastname:
+                                    type: string
+                                    example: Doe2
                         subject:
                           type: object
                           properties:
@@ -208,7 +208,7 @@ paths:
                   type: object
                   properties:
                     id:
-                      type: number
+                      type: integer
                       description: hour id
                     number:
                       type: string
@@ -219,3 +219,151 @@ paths:
                     until:
                       type: string
                       description: time of the end (format HH:mm:ss)
+
+  /chat:
+    get:
+      description: fetch all threads
+      responses:
+        200:
+          description: successfully fetched threads
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      description: id used for referencing in api (/chat/:id)
+                    threadId:
+                      type: integer
+                    sender:
+                      type: string
+                      example: John Doe
+                    recipients:
+                      type: string
+                      example: Jane Doe
+                    privateChat:
+                      type: boolean
+                    allowsAnswers:
+                      type: boolean
+                    unread:
+                      type: integer
+                      description: number of unread messages
+                    lastMessage:
+                      type: string
+                      description: ISO timestamp of last message
+      security:
+        - bearerAuth: [ ]
+    post:
+      description: create new thread
+      responses:
+        201:
+          description: successfully created new thread
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                text:
+                  type: string
+                  description: message content
+                files:
+                  type: array
+                  description: message attachments
+                  items:
+                    type: string
+                    format: binary
+  /chat/{id}:
+    get:
+      description: fetch messages in thread
+      security:
+        - bearerAuth: [ ]
+      responses:
+        200:
+          description: successfully fetched messages
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    text:
+                      type: string
+                    sentTimestamp:
+                      type: string
+                      description: ISO timestamp
+                    sender:
+                      type: object
+                      properties:
+                        firstname:
+                          type: string
+                        lastname:
+                          type: string
+                    attachments:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          url:
+                            type: string
+                            description: download URL
+                          mime:
+                            type: string
+                            description: file mime type
+                          filename:
+                            type: string
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+
+    post:
+      description: send message
+      security:
+        - bearerAuth: [ ]
+      responses:
+        201:
+          description: successfully sent message
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                files:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+                text:
+                  type: string
+
+  /chat/users:
+    get:
+      responses:
+        200:
+          description: successfully fetched chat users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+                    subtext:
+                      type: string
+                      description: for example which subjects they teach
+      description: get all users who can be sent messages
