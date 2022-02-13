@@ -45,6 +45,9 @@
 <script>
 export default {
   name: 'IndexView',
+  mounted() {
+    this.$router.push('/chat');
+  },
 };
 </script>
 
