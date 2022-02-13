@@ -30,8 +30,9 @@ export default {
     },
   },
   data() {
-    let now = DateTime.now();
-    if (this.$store.state.lessons.filter(x => x.date === now.toISODate()).length === 0) {
+    this.day = DateTime.now();
+    let now = this.day;
+    if (!this.$store.state.lessons[now.toISODate()]) {
       superagent.get('/api/schedule')
         .ok(_ => true)
         .auth(this.$store.state.token, { type: 'bearer' })
@@ -46,11 +47,11 @@ export default {
             this.$router.push('/login');
             return;
           }
-          this.$store.commit('addLessonInfo', res.body.hours);
-          let now = this.day || now;
+          let now = this.day || DateTime.now();
+          this.$store.commit('addLessons', [now.toISODate(), res.body.hours]);
 
-          let lessons = this.$store.state.lessons.filter(x => x.date === now.toISODate());
-          if (lessons.length === 0) return;
+          let lessons = res.body.hours;
+          if (!lessons) return;
           lessons = lessons.filter(x =>
             DateTime.fromISO(this.$store.state.hours.filter(y => y.id === x.hour)[0].until) > now.plus({ minutes: 45 })
           );
@@ -60,15 +61,18 @@ export default {
               now = now.plus({ weeks: 1 }).startOf('week').startOf('day');
             }
           }
+
           this.day = now;
         });
     }
-    let lessons = this.$store.state.lessons.filter(x => x.date === now.toISODate());
-    lessons = lessons.filter(x =>
-      DateTime.fromISO(this.$store.state.hours.filter(y => y.id === x.hour)[0].until) > now.plus({ minutes: 45 })
-    );
-    if (lessons.length === 0) {
-      now = now.plus({ days: 1 });
+    let lessons = this.$store.state.lessons[now.toISODate()];
+    if (lessons) {
+      lessons = lessons.filter(x =>
+        DateTime.fromISO(this.$store.state.hours.filter(y => y.id === x.hour)[0].until) > now.plus({ minutes: 45 })
+      );
+      if (lessons.length === 0) {
+        now = now.plus({ days: 1 });
+      }
     }
     if (now.weekday === 6 || now.weekday === 7) {
       now = now.plus({ weeks: 1 }).startOf('week').startOf('day');

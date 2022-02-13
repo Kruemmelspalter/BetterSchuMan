@@ -35,7 +35,7 @@ const store = new Vuex.Store({
     return {
       token: null,
       userinfo: {},
-      lessons: [],
+      lessons: {},
       hours: [],
       threads: [],
       threadMessages: {},
@@ -49,8 +49,8 @@ const store = new Vuex.Store({
     setUserInfo(state, userinfo) {
       state.userinfo = userinfo;
     },
-    addLessonInfo(state, lessonInfo) {
-      state.lessons = [...state.lessons, ...lessonInfo];
+    addLessons(state, [day, lessons]) {
+      Vue.set(state.lessons, day, lessons);
     },
     setHoursData(state, hoursData) {
       state.hours = hoursData;
