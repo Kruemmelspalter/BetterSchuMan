@@ -11,10 +11,7 @@ const CallsResponseSchema = Joi.object({
   results: Joi.array().items(
     Joi.object({
       status: Joi.number().min(100).max(599),
-      data: Joi.alternatives().try(
-        Joi.object().unknown(true),
-        Joi.array().items(Joi.any()),
-      ),
+      data: Joi.any().required(),
     }),
   ),
   systemStatusMessages: Joi.array().optional(),
@@ -36,7 +33,7 @@ export async function request(
   let res = undefined;
   try {
     res = await superagent(method, api + url)
-      .timeout(6000)
+      .timeout(10000)
       .ok((_) => true)
       .auth(token, { type: 'bearer' })
       .send(data);
@@ -82,12 +79,12 @@ export async function calls(
     'POST',
     '/calls',
     {
-      bundleVersion: '28287e3340013f090349',
+      bundleVersion: '138baca5f4c6fb8d92ce',
       requests: [
         {
           moduleName: module,
           endpointName: endpoint,
-          parameters: parameters,
+          parameters: parameters === {} ? null : parameters,
         },
       ],
     },
@@ -103,6 +100,18 @@ export async function calls(
   try {
     await CallsResponseSchema.validateAsync(res.body);
   } catch (e) {
+    if (res.body.results[0] && res.body.results[0].status >= 400) {
+      logger.error({
+        id: requestId,
+        status: res.body.results[0].status,
+        error: res.body.results[0].error || ' ',
+        body: res.body,
+      });
+      throw new HttpException(
+        res.body.results[0].error,
+        res.body.results[0].status || ' ',
+      );
+    }
     logger.error({
       id: requestId,
       status: 502,
@@ -117,4 +126,24 @@ export async function calls(
     throw new HttpException(res.body, res.statusCode);
   }
   return { body: res.body.results[0].data, res };
+}
+
+export async function uploadFile(
+  f: Express.Multer.File,
+  token: string,
+  api = 'https://login.schulmanager-online.de/api',
+) {
+  const res = await superagent
+    .post(`${api}/upload-file`)
+    .query({
+      scope: 'messenger',
+      extension: f.originalname.split('.')[0],
+      size: f.size,
+      type: f.mimetype,
+      name: f.originalname,
+    })
+    .auth(token, { type: 'bearer' })
+    .set('Content-Type', 'application/octet-stream')
+    .send(f.buffer);
+  return res.body;
 }

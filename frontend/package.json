@@ -10,7 +10,9 @@
   },
   "dependencies": {
     "core-js": "^3.19.1",
+    "linkifyjs": "^3.0.5",
     "luxon": "^2.1.1",
+    "showdown": "^1.9.1",
     "superagent": "^6.1.0",
     "vue": "^2.6.11",
     "vue-router": "^3.5.3",

@@ -3,6 +3,7 @@
     <option value="default">Select Module</option>
     <option value="/">Start Page</option>
     <option value="/schedule">Schedule</option>
+    <option value="/chat">Chat</option>
   </select>
 </template>
 

@@ -13,20 +13,20 @@
     <div id="content">
       <router-view />
     </div>
-    <SidebarComponent v-if="$route.path !=='/login'" id="sidebar" />
+    <ScheduleSidebar v-if="$route.path !=='/login'" id="sidebar" />
   </div>
 </template>
 
 <script>
 
-import SidebarComponent from '@/components/sidebar/SidebarComponent';
 import superagent from 'superagent';
 import UserInfoLink from '@/components/UserInfoLink';
 import ModuleSelector from '@/components/ModuleSelector';
+import ScheduleSidebar from '@/components/ScheduleSidebar';
 
 export default {
   name: 'App',
-  components: { ModuleSelector, UserInfoLink, SidebarComponent },
+  components: { ScheduleSidebar, ModuleSelector, UserInfoLink },
   beforeMount() {
     this.$store.commit('setToken', localStorage.getItem('token'));
 
@@ -112,6 +112,8 @@ export default {
   margin-left: 1%;
   margin-bottom: 1%;
   padding: 2%;
+  max-height: 80vh;
+  overflow-y: scroll;
 }
 
 @media (orientation: portrait) {
