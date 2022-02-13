@@ -7,8 +7,8 @@
         <br />
         {{ d.toLocaleString({ day: '2-digit', month: '2-digit', year: '2-digit' }) }}
         <span v-if="loadingErrors[d.toISODate()]" class="loadingError">
-        <br />
-        couldn't load day
+          <br />
+          couldn't load day
       </span>
       </th>
     </tr>
@@ -35,7 +35,7 @@ import LessonThumbnail from '@/components/LessonThumbnail';
 
 
 export default {
-  name: 'ScheduleView',
+  name: 'ScheduleComponent',
   components: { LessonThumbnail },
   props: {
     days: {
@@ -79,7 +79,7 @@ export default {
       const days = [...this.days].sort((a, b) => Math.sign(a.toMillis() - b.toMillis()));
 
       for (const d in days) {
-        if (this.$store.state.lessons.filter(x => x.date === days[d].toISODate()).length === 0) {
+        if (!this.$store.state.lessons[d]) {
           superagent.get('/api/schedule')
             .ok(_ => true)
             .auth(this.$store.state.token, { type: 'bearer' })
@@ -93,14 +93,14 @@ export default {
                 this.loadingErrors[days[d].toISODate()] = true;
                 throw `couldn't load hours for day ${days[d].toISODate()}`;
               }
-              this.$store.commit('addLessonInfo', res.body.hours);
+              this.$store.commit('addLessons', [days[d].toISODate(), res.body.hours]);
             });
         }
       }
 
     },
     lessonsByDayAndHour(day, hour) {
-      return this.$store.state.lessons.filter(l => l.hour === hour.id && l.date === day.toISODate());
+      return (this.$store.state.lessons[day.toISODate()] || []).filter(l => l.hour === hour.id && l.date === day.toISODate());
     },
     convertISO(time) {
       return DateTime.fromISO(time);
@@ -139,6 +139,7 @@ table > * {
 .hour {
   line-height: 80%;
 }
+
 .loadingError {
   background-color: var(--color-text-accent-2);
 }
