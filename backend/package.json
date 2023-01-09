@@ -28,7 +28,7 @@
     "@nestjs/serve-static": "^2.2.2",
     "i": "^0.3.7",
     "joi": "^17.4.2",
-    "luxon": "^2.1.1",
+    "luxon": "^2.5.2",
     "morgan": "^1.10.0",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
